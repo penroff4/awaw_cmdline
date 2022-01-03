@@ -56,10 +56,10 @@ if __name__=="__main__":
             # if expected num of args entered (ie season, row, year, construction rate)
             if len(argv) == 6:
 
-                ship_builder = shipBuildingLaunchDate(argv[2], None, argv[3], argv[4], argv[5], "cmd_line")
+                ship_builder = shipBuildingLaunchDate(argv[2], argv[3], argv[4], argv[5], "cmd_line")
 
             else:
-                ship_builder = shipBuildingLaunchDate(None, 0, 0, 0, 0, "text_input")
+                ship_builder = shipBuildingLaunchDate("", 0, 0, 0, "text_input")
 
             ship_builder.setup()
 
