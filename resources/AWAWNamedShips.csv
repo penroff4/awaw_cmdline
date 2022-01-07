@@ -1,0 +1,238 @@
+Name,Type,Size,Nationality,Speed
+Barham,BB,3,British,Slow
+Malaya,BB,3,British,Slow
+Q. Elizabeth,BB,3,British,Slow
+Ramilies,BB,3,British,Slow
+Resolution,BB,3,British,Slow
+Revenge,BB,3,British,Slow
+Royal Oak,BB,3,British,Slow
+R. Sovereign,BB,3,British,Slow
+Valiant,BB,3,British,Slow
+Warspite,BB,3,British,Slow
+Anson,BB,4,British,Fast
+Duke of York,BB,4,British,Fast
+Howe,BB,4,British,Fast
+King George V,BB,4,British,Fast
+Nelson,BB,4,British,Slow
+Pr of Wales,BB,4,British,Fast
+Rodney,BB,4,British,Slow
+Vanguard,BB,4,British,Fast
+Lionheart,BB,5,British,Fast
+Marlborough,BB,5,British,Fast
+Orion,BC,2,British,Fast
+Swiftsure,BC,2,British,Fast
+Beatty,BC,3,British,Fast
+Hood,BC,3,British,Fast
+Jellicoe,BC,3,British,Fast
+Renown,BC,3,British,Fast
+Repulse,BC,3,British,Fast
+Ark Royal,CVL,2,British,Fast
+Courageous,CVL,2,British,Fast
+Formidable,CVL,2,British,Fast
+Furious,CVL,2,British,Fast
+Glorious,CVL,2,British,Fast
+Illustrious,CVL,2,British,Fast
+Implacable,CVL,2,British,Fast
+Indefatigable,CVL,2,British,Fast
+Indomitable,CVL,2,British,Fast
+Victorious,CVL,2,British,Fast
+Belliqueuse,BB,2,France,Fast
+Revanche,BB,2,France,Fast
+Bretagne,BB,3,France,Slow
+Dunkerque,BB,3,France,Fast
+Lorraine,BB,3,France,Slow
+Lyon,BB,3,France,Fast
+Provence,BB,3,France,Slow
+Strasbourg,BB,3,France,Fast
+Jean Bart,BB,4,France,Fast
+Richelieu,BB,4,France,Fast
+Lille,BB,3,France,Fast
+Europa,CVL,2,Germany,Fast
+Seydlitz,CVL,2,Germany,Fast
+G Zeppelin,CVL,2,Germany,Fast
+Strasser,CVL,2,Germany,Fast
+Bismarck,BB,4,Germany,Fast
+Moltke,BB,4,Germany,Fast
+Siegfried,BB,4,Germany,Fast
+Tirpitz,BB,4,Germany,Fast
+Fried d Gr,BB,5,Germany,Fast
+G. Deutschland,BB,5,Germany,Fast
+Barbarossa,BC,3,Germany,Fast
+Gneisenau,BC,3,Germany,Fast
+Scharnhorst,BC,3,Germany,Fast
+Wallenstein,BC,3,Germany,Fast
+Deutschland,PB,2,Germany,Fast
+Graf Spee,PB,2,Germany,Fast
+Lutzow,PB,2,Germany,Fast
+Mackensen,PB,2,Germany,Fast
+Scheer,PB,2,Germany,Fast
+Von Der Tann,PB,2,Germany,Fast
+A. Doria,BB,3,Italy,Fast
+C. Cavour,BB,3,Italy,Fast
+Caio Duilio,BB,3,Italy,Fast
+F. Caracciolo,BB,3,Italy,Fast
+F. Morosini,BB,3,Italy,Fast
+G. Cesare,BB,3,Italy,Fast
+Impero,BB,4,Italy,Fast
+Lepanto,BB,4,Italy,Fast
+Littorio,BB,4,Italy,Fast
+Napoli,BB,4,Italy,Fast
+Roma,BB,4,Italy,Fast
+V. Veneto,BB,4,Italy,Fast
+C. Borgia,BC,2,Italy,Fast
+C. di Rienzi,BC,2,Italy,Fast
+Aquila,CVL,2,Italy,Fast
+Falcone,CVL,2,Italy,Fast
+F. Baracca,CVL,2,Italy,Fast
+Sparviero,CVL,2,Italy,Fast
+Fuso,BB,3,Japan,Slow
+Hyuga,BB,3,Japan,Slow
+Ise,BB,3,Japan,Slow
+Yamashiro,BB,3,Japan,Slow
+Mutsu,BB,4,Japan,Slow
+Nagato,BB,4,Japan,Slow
+Tosa,BB,4,Japan,Fast
+Tsushima,BB,4,Japan,Fast
+Hizen,BB,5,Japan,Fast
+Kii,BB,5,Japan,Fast
+Musashi,BB,5,Japan,Fast
+Owarii,BB,5,Japan,Fast
+Satsuma,BB,5,Japan,Fast
+Yamato,BB,5,Japan,Fast
+Kurama,BC,2,Japan,Fast
+Tokiwa,BC,2,Japan,Fast
+Aki,BC,3,Japan,Fast
+Hakata,BC,3,Japan,Fast
+Haruna,BC,3,Japan,Fast
+Hiei,BC,3,Japan,Fast
+Kirishima,BC,3,Japan,Fast
+Kongo,BC,3,Japan,Fast
+Akagi,CV,3,Japan,Fast
+Amagi,CV,3,Japan,Fast
+Hiryu,CV,3,Japan,Fast
+Kaga,CV,3,Japan,Fast
+Kasagi,CV,3,Japan,Fast
+Shokaku,CV,3,Japan,Fast
+Soryu,CV,3,Japan,Fast
+Taiho,CV,3,Japan,Fast
+Unryu,CV,3,Japan,Fast
+Zuikaku,CV,3,Japan,Fast
+Koryu,CVB,4,Japan,Fast
+Shinano,CVB,4,Japan,Fast
+Yatagarasu,CVB,4,Japan,Fast
+Yurei,CVB,4,Japan,Fast
+Chitose,CVL,2,Japan,Fast
+Chiyoda,CVL,2,Japan,Fast
+Hiyo,CVL,2,Japan,Fast
+Junyo,CVL,2,Japan,Fast
+Ryuho,CVL,2,Japan,Fast
+Ryujo,CVL,2,Japan,Fast
+Shoho,CVL,2,Japan,Fast
+Zuiho,CVL,2,Japan,Fast
+Gangut,BB,2,Russia,Slow
+Kinburn,BB,2,Russia,Fast
+Navarin,BB,2,Russia,Fast
+Petropavlovsk,BB,2,Russia,Slow
+Sevastopol,BB,2,Russia,Slow
+Kronshtadt,BB,3,Russia,Fast
+Novorossisk,BB,3,Russia,Fast
+Demokratiya,BB,4,Russia,Fast
+Svobodnaya,BB,4,Russia,Fast
+Soyuz,BB,5,Russia,Fast
+Ukraina,BB,5,Russia,Fast
+Arizona,BB,3,United States,Slow
+California,BB,3,United States,Slow
+Colorado,BB,3,United States,Slow
+Georgia,BB,3,United States,Fast
+Idaho,BB,3,United States,Slow
+Maryland,BB,3,United States,Slow
+Mississippi,BB,3,United States,Slow
+N. Dakota,BB,3,United States,Fast
+Nevada,BB,3,United States,Slow
+New Mexico,BB,3,United States,Slow
+New York,BB,3,United States,Slow
+Oklahoma,BB,3,United States,Slow
+Oregon,BB,3,United States,Fast
+Penn.,BB,3,United States,Slow
+Tennessee,BB,3,United States,Slow
+Texas,BB,3,United States,Slow
+Virginia,BB,3,United States,Fast
+W. Virginia,BB,3,United States,Slow
+Alabama,BB,4,United States,Fast
+Indiana,BB,4,United States,Fast
+Mass.,BB,4,United States,Fast
+Michigan,BB,4,United States,Fast
+Minnesota,BB,4,United States,Fast
+N. Carolina,BB,4,United States,Fast
+Nebraska,BB,4,United States,Fast
+S. Dakota,BB,4,United States,Fast
+Vermont,BB,4,United States,Fast
+Washington,BB,4,United States,Fast
+Iowa,BB,5,United States,Fast
+Maine,BB,5,United States,Fast
+Missouri,BB,5,United States,Fast
+Montana,BB,5,United States,Fast
+New Hamp.,BB,5,United States,Fast
+New Jersey,BB,5,United States,Fast
+Ohio,BB,5,United States,Fast
+Wisconsin,BB,5,United States,Fast
+Alaska,BC,2,United States,Fast
+Guam,BC,2,United States,Fast
+Hawaii,BC,2,United States,Fast
+Philippines,BC,2,United States,Fast
+Kings Mtn,CVL,2,United States,Fast
+St. Mihiel,CVL,2,United States,Fast
+Saratoga,CV,3,United States,Fast
+Antietam,CV,3,United States,Fast
+Argonne,CV,3,United States,Fast
+Bennington,CV,3,United States,Fast
+B. H. Richard,CV,3,United States,Fast
+Boxer,CV,3,United States,Fast
+Bunker Hill,CV,3,United States,Fast
+Cabot,CV,3,United States,Fast
+Concord,CV,3,United States,Fast
+Crown Point,CV,3,United States,Fast
+Enterprise,CV,3,United States,Fast
+Essex,CV,3,United States,Fast
+Franklin,CV,3,United States,Fast
+Gettysburg,CV,3,United States,Fast
+Hancock,CV,3,United States,Fast
+Hornet,CV,3,United States,Fast
+Intrepid,CV,3,United States,Fast
+Iwo Jima,CV,3,United States,Fast
+Kearsarge,CV,3,United States,Fast
+L. Champlain,CV,3,United States,Fast
+Lexington,CV,3,United States,Fast
+Leyte,CV,3,United States,Fast
+Oriskany,CV,3,United States,Fast
+Philip Sea,CV,3,United States,Fast
+Randolph,CV,3,United States,Fast
+Reprisal,CV,3,United States,Fast
+Shangri-La,CV,3,United States,Fast
+Tarawa,CV,3,United States,Fast
+Ticonderoga,CV,3,United States,Fast
+Valley Forge,CV,3,United States,Fast
+Wasp,CV,3,United States,Fast
+Yorktown,CV,3,United States,Fast
+F. D. Roosevelt,CVB,4,United States,Fast
+Constellation,CVB,4,United States,Fast
+Coral Sea,CVB,4,United States,Fast
+Midway,CVB,4,United States,Fast
+Fort McHenry,CVL,2,United States,Fast
+Bataan,CVL,2,United States,Fast
+Belleau Wood,CVL,2,United States,Fast
+Buena Vista,CVL,2,United States,Fast
+Cowpens,CVL,2,United States,Fast
+Independence,CVL,2,United States,Fast
+Lafayette,CVL,2,United States,Fast
+Lake Erie,CVL,2,United States,Fast
+Langley,CVL,2,United States,Fast
+Monmouth,CVL,2,United States,Fast
+Monterey,CVL,2,United States,Fast
+Princeton,CVL,2,United States,Fast
+Saipan,CVL,2,United States,Fast
+San Jacinto,CVL,2,United States,Fast
+Shenadoah,CVL,2,United States,Fast
+Stony Point,CVL,2,United States,Fast
+Wright,CVL,2,United States,Fast
+Guilford C.,CVL,2,United States,Fast

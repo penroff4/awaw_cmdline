@@ -2,6 +2,7 @@ from sys import argv
 
 from models.researchDieRoller import researchDieRoller
 from models.shipBuildingLaunchDate import shipBuildingLaunchDate
+from models.airNavalCombat.fleetCombat import fleetCombat
 
 # import help
 
@@ -67,4 +68,18 @@ if __name__=="__main__":
 
 
         elif argv[1] == "fleet_combat":
-            pass
+
+            print("\nPlease choose two sides to engage in fleet combat.")
+            print("\nOptions include:")
+            print("\nGermany, Italy, Japan, United States, Great Britain, France, Russia")
+            
+            print("\nPlease choose side A:")
+            side_a = input().upper()
+
+            print("\nPlease choose side B:")
+            side_b = input().upper()
+
+            fleet_combat = fleetCombat(side_a, side_b)
+
+            fleet_combat.determine_
+           
