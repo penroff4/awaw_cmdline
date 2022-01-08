@@ -1,6 +1,6 @@
 import os
 
-from ShipInitializer import ShipInitializer
+from ..shipTypes.ShipInitializer.ShipInitializer import ShipInitializer
 
 
 def shipComposition(ship, number_of_ship):
@@ -120,11 +120,19 @@ class TaskForce():
         print("For {} ({}) Taskforce {}...\n".format(combatants_dict[current_sideInt]["NATIONALITY"], combatants_dict[current_sideInt]["short_designation"], current_tf_int+1))
 
         for ship in TaskForce.ship_classes_dict:
-
-            print("\nHow many {}S are a part of taskforce {}?\n".format(ship, current_tf_int+1))
      
-            number_of_ship = int(input())
-            # print("\nYou've indicated {} of the following ship class: {}".format(str(number_of_ship), ship))
+            loop_is_done = False
+            while loop_is_done == False:
+
+                try:
+                    print("\nHow many {}S are a part of taskforce {}?\n".format(ship, current_tf_int+1))
+
+                    number_of_ship = int(input())
+                    loop_is_done = True
+                    
+                except ValueError:
+                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than zero.")
+                    input("\npress the ENTER key to continue...\n")
 
             player_ship_dict[ship] = number_of_ship
 

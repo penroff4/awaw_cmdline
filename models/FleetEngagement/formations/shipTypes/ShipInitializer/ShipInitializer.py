@@ -1,4 +1,4 @@
-from shipTypes.FleetFactor import Destroyer, Cruiser, BattleShip, PocketBattleShip, BattleCruiser
+from ..FleetFactor import Destroyer, Cruiser, BattleShip, PocketBattleShip, BattleCruiser
 
 class ShipInitializer(object):
     

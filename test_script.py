@@ -1,7 +1,3 @@
-# from models.FleetEngagement.shipTypes.NavalChit import NavalChit
-# from models.FleetEngagement.shipTypes.FleetFactor import FleetFactor, Destroyer, BattleShip
-# from models.FleetEngagement.shipTypes.FleetFactor import Destroyer, BattleShip
-
 from models.FleetEngagement.FleetEngagement import FleetEngagement
 
 # instantiate principle FleetEngagement object

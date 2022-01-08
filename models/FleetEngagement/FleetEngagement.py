@@ -1,9 +1,7 @@
 import os
 
-# from shipTypes.FleetFactor import Destroyer, Cruiser, BattleShip, PocketBattleShip, BattleCruiser
-
-from formations.TaskForce import TaskForce
-from formations.ShipInitializer import ShipInitializer
+from .formations.TaskForce.TaskForce import TaskForce
+from NavalCombatRound import NavalCombatRound
 
 
 class FleetEngagement(object):
@@ -58,32 +56,26 @@ class FleetEngagement(object):
 
         # clear screen, set loop var
         os.system('cls' if os.name == 'nt' else 'clear')
-        loop_is_done = False
 
         # loop to determine # of TFs
+        loop_is_done = False
         while loop_is_done == False:
 
             # clear screen, ask "how many TFs" per side
             os.system('cls' if os.name == 'nt' else 'clear')
             print("\nFor {} ({}), how many task forces are involved?".format(self.combatants[sideInt]["NATIONALITY"], self.combatants[sideInt]["short_designation"]))
             print("\n")
-
             number_of_taskforces = input("")
 
-            # bark at the user if their input is invalid (try and if not do the same thing...)
+            # bark at the user if their input is invalid
             try:
 
-                if not isinstance(int(number_of_taskforces), int):
-                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
-                    input("\npress the ENTER key to continue...\n")
+                number_of_taskforces = int(number_of_taskforces)
+                loop_is_done = True
 
             except ValueError:
                 print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
                 input("\npress the ENTER key to continue...\n")                
-
-            else:
-                number_of_taskforces = int(number_of_taskforces)
-                loop_is_done = True
 
 
         # for each TF, determine composition of TF and append to TF obj to FleetEngagement.combatants dict
@@ -104,10 +96,14 @@ class FleetEngagement(object):
             
             # update TF number of factors
             taskforce.total_naval_factors = taskforce.tf_total_factors()
-            print("\nCurrent TF total number of naval factors: " + str(taskforce.total_naval_factors))
-
+            
             # append TF obj to a given side's "fleet_composition" list
             self.combatants[sideInt]["fleet_composition"].append(taskforce)
+
+
+    def begin_naval_combat(self):
+        # create combat round obj, feed FleetEngagement dict with TFs per side
+        naval_combat_round = NavalCombatRound(self.combatants)
 
     
 
