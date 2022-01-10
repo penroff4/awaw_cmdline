@@ -2,7 +2,7 @@ from sys import argv
 
 from models.researchDieRoller import researchDieRoller
 from models.shipBuildingLaunchDate import shipBuildingLaunchDate
-from models.airNavalCombat.fleetCombat import fleetCombat
+from models.FleetEngagement import FleetEngagement
 
 # import help
 
