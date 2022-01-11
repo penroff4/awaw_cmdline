@@ -7,6 +7,24 @@ from FleetEngagement import FleetEngagement
 
 class TestFleetEngagement(TestCase):
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        print('setupClass')
+        return super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        print('teardownClass')
+        return super().tearDownClass()
+ 
+    def setUp(self) -> None:
+        print('setUp')
+        return super().setUp()
+
+    def tearDown(self) -> None:
+        print('tearDown')
+        return super().tearDown()
+
     @mock.patch('FleetEngagement.input', create=True)
     def test_fleet_engagement(self, mocked_input):
         """
