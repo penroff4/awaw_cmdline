@@ -1,7 +1,9 @@
 from unittest import mock
 from unittest import TestCase
+import unittest
 
 from FleetEngagement import FleetEngagement
+
 
 class TestFleetEngagement(TestCase):
 
@@ -11,11 +13,18 @@ class TestFleetEngagement(TestCase):
         Test proves FleetEngagement main executes fully (test supplies mocked user inputs)
         """
 
-        mocked_input.side_effect = ["GERMANY", '', "FRANCE", '', 1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE GERMANY', 1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE FRANCE']
-        result = FleetEngagement()
-        result = result.main()
-        self.assertTrue(result == 1, "result.main() did not return 1" )
+        """
+        mocked user input where FleetEngagement main would expect it.
+
+        mocked input includes setting GERMANY and FRANCE as combatting nationalities...
+        ...with each side have a single TF made up of a destroyer and a named fast 3 factor BB
+        """
+        mocked_input.side_effect = ["GERMANY", '', "FRANCE", '', # nationality set up
+                                    1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE GERMANY', # German Fleet comp
+                                    1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE FRANCE']  # French Fleet comp 
+        self.assertTrue(FleetEngagement().main() == 1,
+                        "result.main() did not return 1")
 
 
-# if __name__ == "__main__":
-    # unittest.main()
+if __name__ == "__main__":
+    unittest.main()
