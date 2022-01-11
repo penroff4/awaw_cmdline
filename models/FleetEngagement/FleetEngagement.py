@@ -347,7 +347,7 @@ class ShipInitializer(object):
 
 
 def shipComposition(ship, number_of_ship):
-    """walks through ship composition, calls that ship's init func and returns object"""
+    """walks through ship composition, creates ShipInitializer to handle final instanitation details"""
     if ship == "DESTROYER" or ship == "CRUISER":
 
         for number in range(0, number_of_ship):
@@ -390,10 +390,11 @@ class NavalCombatRound(object):
     def __init__(self, combatants_dict):
         self.combatants_dict = combatants_dict
 
+
     def form_combat_groups(self):
         """Each player secretly assigns combat group numbers to his participating TFs."""
         for combantant_int in self.combatants_dict:
-            for taskforce in self.combatants_dict[combantant_int]:
+            for taskforce in self.combatants_dict[combantant_int]["fleet_composition"]:
 
                 loop_is_done = False
                 while loop_is_done == False:
@@ -488,7 +489,8 @@ class NavalCombatRound(object):
                         # Submarine Attacks: Submarine attacks do not count against the limit on the number of times a found combat group may be attacked.
 
         pass
-    
+
+
     def reveal_combat_groups(self):
         """
 
@@ -500,6 +502,7 @@ class NavalCombatRound(object):
 
         """
         pass
+
 
     def air_strikes_and_attacks(self):
         """
@@ -751,51 +754,68 @@ class FleetEngagement(object):
 
     def begin_naval_combat(self):
         # create combat round obj, feed FleetEngagement dict with TFs per side
-        naval_combat_round = NavalCombatRound(self.combatants)
+        pass
+        # naval_combat_round = NavalCombatRound(self.combatants)
+        # naval_combat_round.main()
 
 if __name__ == "__main__":
-    pass
 
-    
+    # instantiate FleetEngagement object, ie combat between two nationalities
+    test_battle = FleetEngagement()
 
+    # determine combatant nationalities
+    for i in test_battle.combatants.keys():
 
+        test_battle.combatants[i]["NATIONALITY"] = test_battle.determineNationalities(i)
+        
+        input("\npress the ENTER key to continue...\n")
 
-        # determine forces
+    # determine combatants' respective fleet compositions
+    for i in test_battle.combatants.keys():
 
-        # START OF NAVAL COMBAT ROUND
-        #   form combat groups
-        # carrier-based counterair attacks on enemy air bases
-        # allocate unused carrier-based air units between Air Strikes and CAP
-        # allocate land-based air units as Air Cover (convert AAF to AAS as necessary)
-        #   Search for enemy combat groups
-        #   Reveal found combat groups
-        # Carrier-based air strikes against naval units at sea
-        # surprise level
-        # air combat with air cover
-        # air combat with CAP
-        # air defense of naval units
-        # air strikes versus naval units
-        # Land-based air attacks against naval units at sea
-        # (convert AAF to AAS as necessary)
-        # surprise level (ALWAYS NONE)
-        # air combat with air cover
-        # air combat with CAP
-        # air defense of naval units
-        # air strikes versus naval units
-        #   Fleet combat
-        #       Determine which combat groups will engage in fleet combat
-        #       Divide ships into heavy, light, and screened
-        #       Defender ranks heavy ships from largest to smallest, then light ships, then screened ships.
-        #       Heavy ship combat
-        #           Attacker selects targets for his heavy ships.
-        #           Defender selects targets for his heavy ships.
-        #           Resolve all heavy ship fire versus light ships and apply damage.
-        #       Light ship combat
-        #           Select targets for light ships of both sides.
-        #           Resolve all fire versus all heavy ships.
-        #           Resolve all light ship fire versus light ships.
-        #       Screened ship combat
-        #           Resolve all fire versus screened ships if permitted.
-        #   Combat groups which engaged in fleet combat may be recombined
-        #   Ship withdrawal
-        #   Submarine attacks
+        test_battle.fleetComposition(i)    
+
+    # START/CONTINUE NAVAL COMBAT ROUND
+    # combat_continues = True
+    # while combat_continues == True:
+    #    test_battle.begin_naval_combat()
+
+# determine forces
+
+# START OF NAVAL COMBAT ROUND
+#   form combat groups
+# carrier-based counterair attacks on enemy air bases
+# allocate unused carrier-based air units between Air Strikes and CAP
+# allocate land-based air units as Air Cover (convert AAF to AAS as necessary)
+#   Search for enemy combat groups
+#   Reveal found combat groups
+# Carrier-based air strikes against naval units at sea
+# surprise level
+# air combat with air cover
+# air combat with CAP
+# air defense of naval units
+# air strikes versus naval units
+# Land-based air attacks against naval units at sea
+# (convert AAF to AAS as necessary)
+# surprise level (ALWAYS NONE)
+# air combat with air cover
+# air combat with CAP
+# air defense of naval units
+# air strikes versus naval units
+#   Fleet combat
+#       Determine which combat groups will engage in fleet combat
+#       Divide ships into heavy, light, and screened
+#       Defender ranks heavy ships from largest to smallest, then light ships, then screened ships.
+#       Heavy ship combat
+#           Attacker selects targets for his heavy ships.
+#           Defender selects targets for his heavy ships.
+#           Resolve all heavy ship fire versus light ships and apply damage.
+#       Light ship combat
+#           Select targets for light ships of both sides.
+#           Resolve all fire versus all heavy ships.
+#           Resolve all light ship fire versus light ships.
+#       Screened ship combat
+#           Resolve all fire versus screened ships if permitted.
+#   Combat groups which engaged in fleet combat may be recombined
+#   Ship withdrawal
+#   Submarine attacks
