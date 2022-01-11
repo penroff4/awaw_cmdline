@@ -89,6 +89,13 @@ class StrategicWarfareShip(NavalChit):
         pass
 
 
+class Transport(LightShip, StrategicWarfareShip):
+    
+    SPEED = "SLOW"
+    def __init__(self):
+        pass
+
+
 class FastCarrier(HeavyShip, NavalChit):
 
     """
@@ -368,62 +375,13 @@ def shipComposition(ship, number_of_ship):
 
         # number of factors, speed, name
         for number in range(0, number_of_ship):
-            # user inputs ship number of factors
-            loop_is_done = False
-            while loop_is_done == False:
 
-                try:
-                    print("\nFor {} {}:\nHow many naval factors is this {}?  \n\nPlease choose a number between 1 and 5.\n".format(ship, str(number+1), ship))
-                    number_of_factors = int(input())
-                    loop_is_done = True
+            print("\nFor {} {}:\nHow many naval factors is this {}?  \n\nPlease choose a number between 1 and 5.\n".format(ship, str(number+1), ship))
+            number_of_factors = int(input())
 
-                except ValueError:
-                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
-                    input("\npress the ENTER key to continue...\n")   
+            print("\nFor {} {}:\nWhat speed is this {}?  \n\nPlease choose FAST or SLOW.".format(ship, str(number+1), ship))
+            speed = input().upper()
 
-            # user inputs ship speed
-            loop_is_done = False
-            while loop_is_done == False:
-
-                acceptable_answers = ['FAST', 'SLOW']
-                print("\nFor {} {}:\nWhat speed is this {}?  \n\nPlease choose FAST or SLOW.".format(ship, str(number+1), ship))
-                speed = input().upper()
-                
-                if speed in acceptable_answers:
-                    loop_is_done = True
-                else:
-                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is either 'fast' or 'slow'.")
-                    input("\npress the ENTER key to continue...\n")   
-
-            # user inputs ship name
-            # user inputs ship number of factors
-            loop_is_done = False
-            while loop_is_done == False:
-
-                try:
-                    print("\nFor {} {}:\nHow many naval factors is this {}?  \n\nPlease choose a number between 1 and 5.\n".format(ship, str(number+1), ship))
-                    number_of_factors = int(input())
-                    loop_is_done = True
-
-                except ValueError:
-                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
-                    input("\npress the ENTER key to continue...\n")   
-
-            # user inputs ship speed
-            loop_is_done = False
-            while loop_is_done == False:
-
-                acceptable_answers = ['FAST', 'SLOW']
-                print("\nFor {} {}:\nWhat speed is this {}?  \n\nPlease choose FAST or SLOW.".format(ship, str(number+1), ship))
-                speed = input().upper()
-                
-                if speed in acceptable_answers:
-                    loop_is_done = True
-                else:
-                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is either 'fast' or 'slow'.")
-                    input("\npress the ENTER key to continue...\n")   
-
-            # user inputs ship name
             print("\nFor {} {}:\nDoes this {} have a name?\n".format(ship, str(number+1), ship))
             name = input()
 
@@ -807,44 +765,31 @@ class FleetEngagement(object):
         # naval_combat_round = NavalCombatRound(self.combatants)
         # naval_combat_round.main()
 
-if __name__ == "__main__":
-<<<<<<< HEAD
-=======
-    test_battle = FleetEngagement()
-
-    # determine combatant nationalities
-    for i in test_battle.combatants.keys():
-        test_battle.combatants[i]["NATIONALITY"] = test_battle.determineNationalities(i)
-        input("\npress the ENTER key to continue...\n")
-
-    # determine combatants' respective fleet compositions
-    for i in test_battle.combatants.keys():
-        test_battle.fleetComposition(i)    
-
-    input("pause...")
-
+    def main(self):
     
->>>>>>> 8580d0776229af1bd4c2fabdac45b744b77b0fc0
+        # determine combatant nationalities
+        for i in self.combatants.keys():
 
-    # instantiate FleetEngagement object, ie combat between two nationalities
-    test_battle = FleetEngagement()
-
-    # determine combatant nationalities
-    for i in test_battle.combatants.keys():
-
-        test_battle.combatants[i]["NATIONALITY"] = test_battle.determineNationalities(i)
+            self.combatants[i]["NATIONALITY"] = self.determineNationalities(i)
         
-        input("\npress the ENTER key to continue...\n")
+            input("\npress the ENTER key to continue...\n")
 
-    # determine combatants' respective fleet compositions
-    for i in test_battle.combatants.keys():
+        # determine combatants' respective fleet compositions
+        for i in self.combatants.keys():
 
-        test_battle.fleetComposition(i)    
+            self.fleetComposition(i)    
 
-    # START/CONTINUE NAVAL COMBAT ROUND
-    # combat_continues = True
-    # while combat_continues == True:
-    #    test_battle.begin_naval_combat()
+        return 1
+
+        # START/CONTINUE NAVAL COMBAT ROUND
+        # combat_continues = True
+        # while combat_continues == True:
+        #    test_battle.begin_naval_combat()
+
+if __name__ == "__main__":
+    test_battle = FleetEngagement()
+    test_battle.main()
+    
 
 # determine forces
 

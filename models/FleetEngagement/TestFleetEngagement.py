@@ -1,23 +1,21 @@
-import unittest
-# from unittest.mock import MagicMock
+from unittest import mock
+from unittest import TestCase
 
 from FleetEngagement import FleetEngagement
 
-class TestFleetEngagement(unittest.TestCase):
+class TestFleetEngagement(TestCase):
 
-    def test_execute(self):
+    @mock.patch('FleetEngagement.input', create=True)
+    def test_fleet_engagement(self, mocked_input):
         """
-        Test proves FleetEngagement main executes fully
+        Test proves FleetEngagement main executes fully (test supplies mocked user inputs)
         """
-        player_one_nation = 'GERMANY'
-        player_one_taskforce_number_of = 1
-        player_one_ships = {'DESTROYER':1}
-        
-        player_two_nation = 'UNITED STATES'
-        player_one_taskforce_number_of = 1
-        player_one_ships = {'DESTROYER':1}
 
-        self.fleet_engagement = FleetEngagement()
+        mocked_input.side_effect = ["GERMANY", '', "FRANCE", '', 1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE GERMANY', 1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE FRANCE']
+        result = FleetEngagement()
+        result = result.main()
+        self.assertTrue(result == 1, "result.main() did not return 1" )
 
-if __name__ == "__main__":
-    unittest.main()
+
+# if __name__ == "__main__":
+    # unittest.main()
