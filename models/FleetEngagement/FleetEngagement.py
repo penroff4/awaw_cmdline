@@ -82,7 +82,7 @@ class StrategicWarfareShip(NavalChit):
 
     Asws, transports, submarines
     """
-    
+
     NAVAL_CHIT_CLASS = "Strategic Warfare"
 
     def __init__(self):
@@ -90,8 +90,9 @@ class StrategicWarfareShip(NavalChit):
 
 
 class Transport(LightShip, StrategicWarfareShip):
-    
+
     SPEED = "SLOW"
+
     def __init__(self):
         pass
 
@@ -101,7 +102,7 @@ class FastCarrier(HeavyShip, NavalChit):
     """
     docstring for FastCarrier
     """
-    
+
     SPEED = "FAST"
     NAVAL_CHIT_CLASS = "Fast Carrier"
 
@@ -124,7 +125,7 @@ class LightCarrier(FastCarrier):
 
     SHIP_CLASS = "Light Carrier"
     SHIP_CLASS_SHORT = "CVL"
-    
+
     def __init__(self, number_of_factors):
         FastCarrier.__init__(self, number_of_factors)
         self.naval_squadron_capacity = number_of_factors
@@ -138,7 +139,7 @@ class FleetCarrier(FastCarrier):
 
     SHIP_CLASS = "Fleet Carrier"
     SHIP_CLASS_SHORT = "CV"
-    
+
     def __init__(self, number_of_factors):
         FastCarrier.__init__(self, number_of_factors)
         self.naval_squadron_capacity = number_of_factors
@@ -152,14 +153,14 @@ class SuperCarrier(FastCarrier):
 
     SHIP_CLASS = "Super Carrier"
     SHIP_CLASS_SHORT = "CVB"
-    
+
     def __init__(self, number_of_factors):
         FastCarrier.__init__(self, number_of_factors)
         self.naval_squadron_capacity = number_of_factors
 
 
 class EscortCarrier(LightShip, StrategicWarfareShip):
-    
+
     SPEED = "SLOW"
 
     def __init__(self):
@@ -167,17 +168,17 @@ class EscortCarrier(LightShip, StrategicWarfareShip):
 
 
 class Submarine(StrategicWarfareShip):
-    
+
     SPEED = "FAST"
-    
+
     def __init__(self):
         pass
 
 
 class Asw(StrategicWarfareShip):
-    
+
     SPEED = "FAST"
-    
+
     def __init__(self):
         pass
 
@@ -202,7 +203,7 @@ class FleetFactor(NavalChit):
 
     SHIP_CLASS = "FLEET FACTOR"
     SHIP_CLASS_SHORT = "FF"
-    
+
     def __init__(self, number_of_factors):
         NavalChit.__init__(self, number_of_factors)
 
@@ -217,12 +218,12 @@ class Destroyer(LightShip, FleetFactor):
     docstring for destroyer
 
     """
-    
+
     SPEED = "FAST"
     NUMBER_OF_FACTORS = 1
     SHIP_CLASS = "DESTROYER"
     SHIP_CLASS_SHORT = "DD"
-    
+
     def __init__(self, number_of_factors):
         LightShip.__init__(self)
         FleetFactor.__init__(self, number_of_factors)
@@ -235,7 +236,7 @@ class Destroyer(LightShip, FleetFactor):
 
 
 class Cruiser(LightShip, FleetFactor):
-    
+
     """
 
     docstring for cruiser
@@ -246,11 +247,10 @@ class Cruiser(LightShip, FleetFactor):
     NUMBER_OF_FACTORS = 2
     SHIP_CLASS = "CRUISER"
     SHIP_CLASS_SHORT = "CA"
-    
+
     def __init__(self, number_of_factors):
         LightShip.__init__(self)
         FleetFactor.__init__(self, number_of_factors)
-
 
     def __str__(self):
         return Cruiser.SHIP_CLASS_SHORT + str(NUMBER_OF_FACTORS)
@@ -281,7 +281,7 @@ class BattleShip(CapitalShip):
 
     SHIP_CLASS = "Battleship"
     SHIP_CLASS_SHORT = "BB"
-    
+
     def __init__(self, number_of_factors, speed="FAST", name=""):
         CapitalShip.__init__(self, number_of_factors, speed, name)
 
@@ -326,7 +326,7 @@ class BattleCruiser(CapitalShip):
 
 
 class ShipInitializer(object):
-    
+
     """handles initialization and instantation calls for different ship classes"""
 
     def __init__(self, ship_class, number_of_factors, speed="", name=""):
@@ -336,7 +336,7 @@ class ShipInitializer(object):
         self.speed = speed
 
     def create_ship(self):
-        
+
         if self.ship_class == "DESTROYER":
             return Destroyer(self.number_of_factors)
 
@@ -344,7 +344,7 @@ class ShipInitializer(object):
             return Cruiser(self.number_of_factors)
 
         elif self.ship_class == "BATTLECRUISER":
-            return BattleCruiser(self.number_of_factors, self.speed, self.name)         
+            return BattleCruiser(self.number_of_factors, self.speed, self.name)
 
         elif self.ship_class == "POCKET BATTLESHIP":
             return PocketBattleShip(self.number_of_factors, self.speed, self.name)
@@ -359,7 +359,7 @@ def shipComposition(ship, number_of_ship):
 
         for number in range(0, number_of_ship):
 
-            if ship == "DESTROYER": 
+            if ship == "DESTROYER":
                 number_of_factors = number_of_ship * 1
 
             elif ship == "CRUISER":
@@ -367,7 +367,8 @@ def shipComposition(ship, number_of_ship):
 
             placeholder_ship = ShipInitializer(ship, number_of_factors)
             placeholder_ship = placeholder_ship.create_ship()
-            return placeholder_ship # taskforce.assigned_ships.append(placeholder_ship)
+            # taskforce.assigned_ships.append(placeholder_ship)
+            return placeholder_ship
 
     elif ship == "BATTLESHIP" or ship == "BATTLECRUISER" or ship == "POCKET BATTLESHIP":
 
@@ -376,27 +377,30 @@ def shipComposition(ship, number_of_ship):
         # number of factors, speed, name
         for number in range(0, number_of_ship):
 
-            print("\nFor {} {}:\nHow many naval factors is this {}?  \n\nPlease choose a number between 1 and 5.\n".format(ship, str(number+1), ship))
+            print("\nFor {} {}:\nHow many naval factors is this {}?  \n\nPlease choose a number between 1 and 5.\n".format(
+                ship, str(number+1), ship))
             number_of_factors = int(input())
 
-            print("\nFor {} {}:\nWhat speed is this {}?  \n\nPlease choose FAST or SLOW.".format(ship, str(number+1), ship))
+            print("\nFor {} {}:\nWhat speed is this {}?  \n\nPlease choose FAST or SLOW.".format(
+                ship, str(number+1), ship))
             speed = input().upper()
 
-            print("\nFor {} {}:\nDoes this {} have a name?\n".format(ship, str(number+1), ship))
+            print("\nFor {} {}:\nDoes this {} have a name?\n".format(
+                ship, str(number+1), ship))
             name = input()
 
-            placeholder_ship = ShipInitializer(ship, number_of_factors, speed, name).create_ship()
+            placeholder_ship = ShipInitializer(
+                ship, number_of_factors, speed, name).create_ship()
 
             return placeholder_ship
 
 
 class NavalCombatRound(object):
-    
+
     """docstring for NavalCombatRound"""
 
     def __init__(self, combatants_dict):
         self.combatants_dict = combatants_dict
-
 
     def form_combat_groups(self):
         """Each player secretly assigns combat group numbers to his participating TFs."""
@@ -428,7 +432,6 @@ class NavalCombatRound(object):
                             "\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than zero.")
                         input("\npress the ENTER key to continue...\n")
 
-
     def attack_enemy_air_bases(self):
         """
         Each player secretly allocates carrier-based NAS to CAP.  
@@ -439,13 +442,11 @@ class NavalCombatRound(object):
 
         """
         pass
-    
-    
+
     def allocate_carrier_air_to_air_strikes(self):
         """Carrier NAS (not assigned to CAP, not eliminated/aborted) may conduct air strikes against enemy naval units."""
         pass
-    
-    
+
     def allocate_land_based_air_to_air_cover(self):
         """
 
@@ -459,44 +460,42 @@ class NavalCombatRound(object):
 
         """
         pass
-    
 
     def search(self):
         """Each player rolls dice to determine his success in searching for his opponent's combat groups."""
 
         # for combatant
-            # determine number of search rolls
+        # determine number of search rolls
 
-                # SIMPLE METHOD
-                    # player input number of search die
+        # SIMPLE METHOD
+        # player input number of search die
 
-                # RAW method
-                    # one die per land-based air squadron
-                    # one die (and one fewer die for opponent) per tactical codebreaking card played (or via MAGIC intercept)
-                    # one die per additional combat round
-                    # one die for each friendly ACTIVE CG consisting of at least ten undamaged naval factors
-                    # One die for each distant combat group containing at least one fully operational fast carrier at the start of combat round (no additional mod for active CGs containing fast carrier)
+        # RAW method
+        # one die per land-based air squadron
+        # one die (and one fewer die for opponent) per tactical codebreaking card played (or via MAGIC intercept)
+        # one die per additional combat round
+        # one die for each friendly ACTIVE CG consisting of at least ten undamaged naval factors
+        # One die for each distant combat group containing at least one fully operational fast carrier at the start of combat round (no additional mod for active CGs containing fast carrier)
 
-            # determine search results
-                # each die which matches the number of an enemy CG achieves a search result against that CG
-                # With one search result,
-                    # CG is FOUND, and must reveal
-                        # whether CG consists of less than ten naval factors
-                        # how many fast carriers present in CG
-                        # CG SPEED
-                        # whether CG is carrying cargo
-                # with multiple search results against a given CG
-                    # CG may be attacked more than once equal to number of search results
-                        # Air Strikes: For each search result against an active or distant enemy combat group, one air strike may be made against that combat group (23.72).
-                        # Fleet Combat: For each search result against a distant enemy combat group, one active unpaired combat group may initiate fleet combat against that combat group (22.52). No search results are required for fleet combat between active combat groups and such fleet combat does not count against the limit on the number of air strikes.
-                        # Effects Cumulative: The effects of search results are cumulative: two search results would allow any one of the following:
-                            # Two air strikes against any combat group;
-                            # Two fleet combats against a distant combat group; or
-                            # One air strike and one fleet combat against a distant combat group.
-                        # Submarine Attacks: Submarine attacks do not count against the limit on the number of times a found combat group may be attacked.
+        # determine search results
+        # each die which matches the number of an enemy CG achieves a search result against that CG
+        # With one search result,
+        # CG is FOUND, and must reveal
+        # whether CG consists of less than ten naval factors
+        # how many fast carriers present in CG
+        # CG SPEED
+        # whether CG is carrying cargo
+        # with multiple search results against a given CG
+        # CG may be attacked more than once equal to number of search results
+        # Air Strikes: For each search result against an active or distant enemy combat group, one air strike may be made against that combat group (23.72).
+        # Fleet Combat: For each search result against a distant enemy combat group, one active unpaired combat group may initiate fleet combat against that combat group (22.52). No search results are required for fleet combat between active combat groups and such fleet combat does not count against the limit on the number of air strikes.
+        # Effects Cumulative: The effects of search results are cumulative: two search results would allow any one of the following:
+        # Two air strikes against any combat group;
+        # Two fleet combats against a distant combat group; or
+        # One air strike and one fleet combat against a distant combat group.
+        # Submarine Attacks: Submarine attacks do not count against the limit on the number of times a found combat group may be attacked.
 
         pass
-
 
     def reveal_combat_groups(self):
         """
@@ -510,7 +509,6 @@ class NavalCombatRound(object):
         """
         pass
 
-
     def air_strikes_and_attacks(self):
         """
 
@@ -520,7 +518,6 @@ class NavalCombatRound(object):
 
         """
         pass
-
 
     def fleet_combat(self):
         """Fleet combat is resolved"""
@@ -540,12 +537,10 @@ class NavalCombatRound(object):
         #       Screened ship combat
         #           Resolve all fire versus screened ships if permitted.
         pass
-     
 
     def submarine_attacks(self):
         """Submarine attacks are resolved"""
         pass
-
 
     def main(self):
         self.form_combat_groups()
@@ -564,8 +559,8 @@ class TaskForce(object):
 
     # no more than 25 naval factors in a Task Force
     NAVAL_FACTOR_LIMIT = 25
-    ship_classes_dict = ["DESTROYER", "CRUISER", "BATTLECRUISER", "POCKET BATTLESHIP", "BATTLESHIP"]
-
+    ship_classes_dict = ["DESTROYER", "CRUISER",
+                         "BATTLECRUISER", "POCKET BATTLESHIP", "BATTLESHIP"]
 
     def __init__(self, nationality="", total_naval_factors=0, status="", speed=""):
         self.nationality = nationality
@@ -575,7 +570,6 @@ class TaskForce(object):
         self.assigned_ships = []
         self.combat_group = None
 
-    
     def update_tf_speed(self):
         """look through ships in TF, if any are SLOW then TF is SLOW, else FAST"""
 
@@ -591,25 +585,24 @@ class TaskForce(object):
 
             self.speed = "SLOW"
 
-        else: self.speed = ship_speeds[0]
+        else:
+            self.speed = ship_speeds[0]
 
-    
     def tf_total_factors(self):
         """returns total naval factors in TF"""
         total_factors = 0
-        
+
         for ship in self.assigned_ships:
-            
+
             total_factors = total_factors + ship.number_of_factors
 
         return total_factors
 
-    
     def distinct_ShipTypes(self):
         """Returns a list of distinct ship types in TF"""
 
         distinct_ShipTypes = []
-        
+
         for ship in self.assigned_ships:
 
             if ship.SHIP_CLASS not in distinct_ShipTypes:
@@ -618,17 +611,14 @@ class TaskForce(object):
 
         return distinct_ShipTypes
 
-    
     def append_to_tf(self, ship):
         """append ship obj to TF list ie self.assigned_ships"""
         self.assigned_ships.append(ship)
-
 
     def assign_combat_group(self, cg_id):
         """updates TF Combat Group value to match inputted cg_id"""
         self.combat_group = cg_id
 
-    
     def taskforceComposition(self, combatants_dict, current_sideInt, current_tf_int):
         """walks player through composition of a given TF, returns TF object"""
 
@@ -636,21 +626,24 @@ class TaskForce(object):
 
         player_ship_dict = {}
 
-        print("For {} ({}) Taskforce {}...\n".format(combatants_dict[current_sideInt]["NATIONALITY"], combatants_dict[current_sideInt]["short_designation"], current_tf_int+1))
+        print("For {} ({}) Taskforce {}...\n".format(
+            combatants_dict[current_sideInt]["NATIONALITY"], combatants_dict[current_sideInt]["short_designation"], current_tf_int+1))
 
         for ship in TaskForce.ship_classes_dict:
-     
+
             loop_is_done = False
             while loop_is_done == False:
 
                 try:
-                    print("\nHow many {}S are a part of taskforce {}?\n".format(ship, current_tf_int+1))
+                    print("\nHow many {}S are a part of taskforce {}?\n".format(
+                        ship, current_tf_int+1))
 
                     number_of_ship = int(input())
                     loop_is_done = True
-                    
+
                 except ValueError:
-                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than zero.")
+                    print(
+                        "\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than zero.")
                     input("\npress the ENTER key to continue...\n")
 
             player_ship_dict[ship] = number_of_ship
@@ -659,19 +652,23 @@ class TaskForce(object):
 
             if player_ship_dict[ship] > 0:
 
-                self.append_to_tf(shipComposition(ship, player_ship_dict[ship]))
+                self.append_to_tf(shipComposition(
+                    ship, player_ship_dict[ship]))
 
 
 class FleetEngagement(object):
     """instantiates a fleet engagement between two nationalities, generates TFs as well as ship composition of those TFs"""
 
-    nations_dict = ["GERMANY", "UNITED STATES", "ITALY", "JAPAN", "COMMONWEALTH", "FRANCE", "RUSSIA"]
-    ship_classes_dict = ["DESTROYER", "CRUISER", "BATTLECRUISER", "POCKET BATTLESHIP", "BATTLESHIP"]
+    nations_dict = ["GERMANY", "UNITED STATES", "ITALY",
+                    "JAPAN", "COMMONWEALTH", "FRANCE", "RUSSIA"]
+    ship_classes_dict = ["DESTROYER", "CRUISER",
+                         "BATTLECRUISER", "POCKET BATTLESHIP", "BATTLESHIP"]
 
     def __init__(self):
-        self.combatants = {0:{"short_designation": "sideA"}, 1:{"short_designation": "sideB"}}
+        self.combatants = {0: {"short_designation": "sideA"},
+                           1: {"short_designation": "sideB"}}
 
-    def determineNationalities(self,i):
+    def determineNationalities(self, i):
         """lists for user potential nationalities to play as, returns selected nationality as string value"""
 
         loop_is_done = False
@@ -680,7 +677,8 @@ class FleetEngagement(object):
             # clear terminal screen
             os.system('cls' if os.name == 'nt' else 'clear')
 
-            print("\nPlease choose a side for combatant {} from the following:\n".format(self.combatants[i]["short_designation"]))
+            print("\nPlease choose a side for combatant {} from the following:\n".format(
+                self.combatants[i]["short_designation"]))
 
             # iterate through nations_dict to list nation options to player
             for nation in FleetEngagement.nations_dict:
@@ -702,9 +700,9 @@ class FleetEngagement(object):
                     loop_is_done = True
 
             # only print if user choice is invalid, and loop to continue
-            print("\nPlayer choice is invalid.  Please confirm your choice is a listed nationality.")
+            print(
+                "\nPlayer choice is invalid.  Please confirm your choice is a listed nationality.")
             input("\npress the ENTER key to continue...\n")
-
 
     def fleetComposition(self, sideInt):
         """walks player through fleet composition for a given side, updates self.combatants[sideInt]"""
@@ -721,7 +719,8 @@ class FleetEngagement(object):
 
             # clear screen, ask "how many TFs" per side
             os.system('cls' if os.name == 'nt' else 'clear')
-            print("\nFor {} ({}), how many task forces are involved?".format(self.combatants[sideInt]["NATIONALITY"], self.combatants[sideInt]["short_designation"]))
+            print("\nFor {} ({}), how many task forces are involved?".format(
+                self.combatants[sideInt]["NATIONALITY"], self.combatants[sideInt]["short_designation"]))
             print("\n")
             number_of_taskforces = input("")
 
@@ -732,32 +731,34 @@ class FleetEngagement(object):
                 loop_is_done = True
 
             except ValueError:
-                print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
-                input("\npress the ENTER key to continue...\n")                
-
+                print(
+                    "\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
+                input("\npress the ENTER key to continue...\n")
 
         # for each TF, determine composition of TF and append to TF obj to FleetEngagement.combatants dict
         for current_tf in range(0, number_of_taskforces):
             os.system('cls' if os.name == 'nt' else 'clear')
 
-            print("\nDetermining composition of {} ({}) taskforce {}...".format(self.combatants[sideInt]["NATIONALITY"], self.combatants[sideInt]["short_designation"], current_tf+1))
+            print("\nDetermining composition of {} ({}) taskforce {}...".format(
+                self.combatants[sideInt]["NATIONALITY"], self.combatants[sideInt]["short_designation"], current_tf+1))
             print("\n")
-            
-            # create TF obj
-            taskforce = TaskForce(self.combatants[sideInt]["NATIONALITY"], 0, "UNINVERTED", "FAST")
 
-            # determine TF composition via TF class method 
-            taskforce.taskforceComposition(self.combatants, sideInt, current_tf)
-            
+            # create TF obj
+            taskforce = TaskForce(
+                self.combatants[sideInt]["NATIONALITY"], 0, "UNINVERTED", "FAST")
+
+            # determine TF composition via TF class method
+            taskforce.taskforceComposition(
+                self.combatants, sideInt, current_tf)
+
             # update TF speed
             taskforce.update_tf_speed()
-            
+
             # update TF number of factors
             taskforce.total_naval_factors = taskforce.tf_total_factors()
-            
+
             # append TF obj to a given side's "fleet_composition" list
             self.combatants[sideInt]["fleet_composition"].append(taskforce)
-
 
     def begin_naval_combat(self):
         # create combat round obj, feed FleetEngagement dict with TFs per side
@@ -766,18 +767,18 @@ class FleetEngagement(object):
         # naval_combat_round.main()
 
     def main(self):
-    
+
         # determine combatant nationalities
         for i in self.combatants.keys():
 
             self.combatants[i]["NATIONALITY"] = self.determineNationalities(i)
-        
+
             input("\npress the ENTER key to continue...\n")
 
         # determine combatants' respective fleet compositions
         for i in self.combatants.keys():
 
-            self.fleetComposition(i)    
+            self.fleetComposition(i)
 
         return 1
 
@@ -786,10 +787,11 @@ class FleetEngagement(object):
         # while combat_continues == True:
         #    test_battle.begin_naval_combat()
 
+
 if __name__ == "__main__":
     test_battle = FleetEngagement()
     test_battle.main()
-    
+
 
 # determine forces
 
