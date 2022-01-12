@@ -38,8 +38,18 @@ class TestFleetEngagement(TestCase):
         ...with each side have a single TF made up of a destroyer and a named fast 3 factor BB
         """
         mocked_input.side_effect = ["GERMANY", '', "FRANCE", '', # nationality set up
-                                    1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE GERMANY', # German Fleet comp
-                                    1, 1, 0, 0, 0, 1, 3, 'FAST', 'LE FRANCE']  # French Fleet comp 
+                                    1, # one german task force
+                                    3, # TF numbered 3
+                                    1, 0, 0, 0, # one destroyer, no CA, PB, BC
+                                    1, 3, 'FAST', 'LE GERMANY', # one fast BB3 named LE GERMANY
+                                    1, # one french TF
+                                    4, # TF numbered 4
+                                    1, 0, 0, 0, # one destroyer, no CA, PB, BC
+                                    1, 3, 'FAST', 'LE FRANCE',   # one fast BB3 named LE FRANCE
+                                    '', # enter past 'beginning fleet engagement' screen
+                                    4, # Assign German TF 3 to CG 4
+                                    3, # Assign French TF 4 to CG 3
+                                    ]
         self.assertTrue(FleetEngagement().main() == 1,
                         "result.main() did not return 1")
 
