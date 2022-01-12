@@ -10,6 +10,9 @@ logging.basicConfig(
     datefmt="%d-%b-%y %H:%M:%S",
 )
 
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 ### SHIP SIZE CLASSES ###
 class HeavyShip:
     """
@@ -420,7 +423,7 @@ class NavalCombatRound(object):
         """
         Each player secretly assigns  his participating TFs to a Combat Group.
         """
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear_screen()
 
         for combatant_int in self.combatants_dict:
             for taskforce_int in range(0, len(self.combatants_dict[combatant_int]["fleet_composition"])):
@@ -429,8 +432,8 @@ class NavalCombatRound(object):
                 while loop_is_done == False:
 
                     try:
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        
+                        clear_screen()
+
                         print("\nCombatant {} ({}):\n".format(
                             self.combatants_dict[combatant_int]["NATIONALITY"], 
                             self.combatants_dict[combatant_int]["short_designation"]))
@@ -442,7 +445,6 @@ class NavalCombatRound(object):
 
                         if temp_combat_group > 0 and temp_combat_group < 7:
 
-                            #taskforce.combat_group = temp_combat_group
                             self.combatants_dict[combatant_int]["fleet_composition"][taskforce_int].combat_group = temp_combat_group
 
                         else:
@@ -568,7 +570,9 @@ class NavalCombatRound(object):
         pass
 
     def main(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear_screen()
+
+        AIR_COMBAT = False
         
         print("Combatants fleet compositions determined...")
         
@@ -577,9 +581,16 @@ class NavalCombatRound(object):
         input("\npress the ENTER key to continue...")
         
         self.form_combat_groups()
-        # self.attack_enemy_air_bases()
-        # self.allocate_carrier_air_to_air_strikes()
-        # self.allocate_land_based_air_to_air_cover()
+
+        if AIR_COMBAT == True:
+            self.attack_enemy_air_bases()
+            self.allocate_carrier_air_to_air_strikes()
+            self.allocate_land_based_air_to_air_cover()
+
+        clear_screen()        
+        print("Combat groups assigned...\n")
+        print("\nInitializing search rolls...")
+        
         # self.search()
         # self.reveal_combat_groups()
         # self.air_strikes_and_attacks()
@@ -667,7 +678,7 @@ class TaskForce(object):
     def taskforceComposition(self, combatants_dict, current_sideInt):
         """walks player through composition of a given TF, returns TF object"""
 
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear_screen()
 
         player_ship_dict = {}
 
@@ -745,7 +756,7 @@ class FleetEngagement(object):
         while loop_is_done == False:
 
             # clear terminal screen
-            os.system('cls' if os.name == 'nt' else 'clear')
+            clear_screen()
 
             print("\nPlease choose a side for combatant {} from the following:\n"\
                 .format(self.combatants[i]["short_designation"]))
@@ -785,14 +796,14 @@ class FleetEngagement(object):
         self.combatants[sideInt]["fleet_composition"] = []
 
         # clear screen, set loop var
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear_screen()
 
         # loop to determine # of TFs
         loop_is_done = False
         while loop_is_done == False:
 
             # clear screen, ask "how many TFs" per side
-            os.system('cls' if os.name == 'nt' else 'clear')
+            clear_screen()
             
             print("\nFor {} ({}), how many task forces are involved?".format(
                 self.combatants[sideInt]["NATIONALITY"], 
@@ -819,7 +830,7 @@ class FleetEngagement(object):
         # and append to TF obj to FleetEngagement.combatants dict
         for current_tf in range(0, number_of_taskforces):
 
-            os.system('cls' if os.name == 'nt' else 'clear')
+            clear_screen()
 
             print("\nDetermining composition of {} ({}) taskforce ({})...".format(
                 self.combatants[sideInt]["NATIONALITY"], 
