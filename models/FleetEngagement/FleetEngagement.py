@@ -11,6 +11,7 @@ logging.basicConfig(
     datefmt="%d-%b-%y %H:%M:%S",
 )
 
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -43,6 +44,7 @@ class LightShip:
 
     def __init__(self):
         pass
+
 
 ### NAVAL CHIT CLASSES ###
 class NavalChit:
@@ -86,6 +88,7 @@ class NavalChit:
     def long_name(self):
 
         return self.nationality + " " + self.number_of_factors + " factor " + SHIP_CLASS
+
 
 ### STRATEGIC WARFARE CLASSES ###
 class StrategicWarfareShip(NavalChit):
@@ -215,7 +218,7 @@ class FleetFactor(NavalChit):
 
     """
 
-    NAVAL_CHIT_CLASS = "Fleet Factor"
+    SHIP_META_CLASS = "Fleet Factor"
 
     SHIP_CLASS = "FLEET FACTOR"
     SHIP_CLASS_SHORT = "FF"
@@ -529,13 +532,13 @@ class NavalCombatRound(object):
         
         # use Rules as Written to determine number of search die
         elif method == "RAW":
-            pass
             # RAW method
             # one die per land-based air squadron
             # one die (and one fewer die for opponent) per tactical codebreaking card played (or via MAGIC intercept)
             # one die per additional combat round
             # one die for each friendly ACTIVE CG consisting of at least ten undamaged naval factors
             # One die for each distant combat group containing at least one fully operational fast carrier at the start of combat round (no additional mod for active CGs containing fast carrier)
+            pass
 
         clear_screen()
         print("Search rolls performed.  Determining search results...\n")
@@ -607,37 +610,43 @@ class NavalCombatRound(object):
                 self.combatants_dict[combatant_int]["short_designation"]
                 )
             )
-            print("{} total search results achieved (out of {} enemy Combat Groups)...\n\n".format(
+
+            print("Search die rolls are as follow...\n\n")
+            for die_roll in self.combatants_dict[combatant_int]["search_rolls_list"]:
+                print("{}...\n\n".format(die_roll))
+
+            print("{} total search results achieved (out of {} enemy Combat Group(s))...\n\n".format(
                 self.combatants_dict[combatant_int]["current_round_search_results"],
                 len(self.combatants_dict[opponent_int]["fleet_composition"])
                 )
             )
             
-            print("FOUND enemy Combat Groups:\n\n")
-            for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int]["fleet_composition"])):
-                if self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int].combat_group_status == "FOUND":
+            if self.combatants_dict[combatant_int]["current_round_search_results"] >= 1:
+                print("FOUND enemy Combat Groups:\n\n")
+                for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int]["fleet_composition"])):
+                    if self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int].combat_group_status == "FOUND":
 
-                    tf_meta_class_count_dict = self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int].ships_meta_class_count_dict()
-                    """
-                    tf_fast_carrier_count = 0
-                    
-                    for ship in tf_ship_dict:
-                        if  ship.SHIP_META_CLASS == "Fast Carrier":
+                        tf_meta_class_count_dict = self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int].ships_meta_class_count_dict()
+                        
+                        tf_fast_carrier_count = 0
+                        
+                        for ship in tf_ship_dict:
+                            if  ship.SHIP_META_CLASS == "Fast Carrier":
+                                tf_fast_carrier_count = tf_fast_carrier_count + 1
 
 
-                    for 
+                    # for 
                     # whether CG consists of less than ten naval factors
-                    print(number of fast carriers in enemy combat group)
-                    print(combat group speed)
-                    print(is combat group carrying cargo)
-                    """
+                    # print(number of fast carriers in enemy combat group)
+                    # print(combat group speed)
+                    # print(is combat group carrying cargo)
+                    
 
-            """
             print("HIDDEN enemy combat groups:\n\n")
             for i in enemy combat groups:
                 if enemy combat group status == "HIDDEN":
                     print("{} Combat Group {}".format(nationality, number))
-            """
+
         pass
 
 
