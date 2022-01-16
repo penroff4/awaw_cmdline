@@ -773,14 +773,14 @@ class NavalCombatRound(object):
                             if ship_meta_class == "Fast Carrier":
                                 tf_fast_carrier_count = tf_fast_carrier_count + 1
 
-                        if current_enemy_combat_group.tf_less_than_ten_naval_factors() == True:
+                        if current_enemy_combat_group.tf_less_than_ten_naval_factors() is True:
                             cg_ten_factor_status = "Combat Group consists of less than ten naval factors"
                         else:
                             cg_ten_factor_status = "Combat Group consists of ten or more naval factors"
 
                         cg_speed = current_enemy_combat_group.speed
 
-                        if current_enemy_combat_group.escorting_cargo == True:
+                        if current_enemy_combat_group.escorting_cargo is True:
                             combat_group_carrying_cargo_status = "Cargo present"
                         else:
                             combat_group_carrying_cargo_status = "Cargo not present"
@@ -839,7 +839,7 @@ class NavalCombatRound(object):
         # naval_combat_table =
 
         clear_screen()
-        print("Proceeding to air strikes/attacks phase...\n\n")
+        print("Search results achieved...Proceeding to fleet combat phase...\n\n")
         print("Please press enter to continue...\n\n")
         input()
 
@@ -894,6 +894,16 @@ class NavalCombatRound(object):
         """
         pass
 
+    def determine_combat_round_has_search_results(self):
+        
+        self.current_round_has_search_results = False
+
+        for combatant_int in self.combatants_dict:
+        
+            if self.combatants_dict[combatant_int]["current_round_search_results"] > 0:
+                self.current_round_has_search_results = True
+
+
     def main(self):
         clear_screen()
 
@@ -905,7 +915,7 @@ class NavalCombatRound(object):
 
         self.form_combat_groups()
 
-        if AIR_ALLOWED == True:
+        if AIR_ALLOWED is True:
             self.attack_enemy_air_bases()
             self.allocate_carrier_air_to_air_strikes()
             self.allocate_land_based_air_to_air_cover()
@@ -920,12 +930,23 @@ class NavalCombatRound(object):
         # 'Reveal' FOUND combat groups, list HIDDEN combat groups to user
         self.reveal_combat_groups()
 
-        if AIR_ALLOWED == True:
-            self.air_strikes_and_attacks()
+        self.determine_combat_round_has_search_results()
 
-        self.fleet_combat()
+        if self.current_round_has_search_results is True:
 
-        self.submarine_attacks()
+            if AIR_ALLOWED is True:
+                self.air_strikes_and_attacks()
+                
+            self.fleet_combat()
+
+            self.submarine_attacks()
+        
+        else:
+            clear_screen()
+            
+            print("\nNo search achieved by either side...\n")
+            print("\nPress enter to continue...")
+            input()
 
         self.determine_combat_round_loser()
 
@@ -1206,6 +1227,12 @@ class FleetEngagement(object):
             try:
 
                 number_of_taskforces = int(number_of_taskforces)
+                
+                if number_of_taskforces > 0:
+                    pass
+                else:
+                    raise ValueError
+
                 loop_is_done = True
 
             except ValueError:
@@ -1292,7 +1319,7 @@ class FleetEngagement(object):
         # of consecutive combat have occurred is critical
         naval_combat_round_count = 0
         naval_combat_continues = True
-        while naval_combat_continues == True:
+        while naval_combat_continues is True:
 
             # increase to represent 'current' round of naval combat
             naval_combat_round_count = naval_combat_round_count + 1
