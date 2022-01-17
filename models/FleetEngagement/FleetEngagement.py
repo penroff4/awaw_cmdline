@@ -18,15 +18,20 @@ logging.basicConfig(
 # if false, air interactions not allowed and/or skipped
 AIR_ALLOWED = False
 
-### GLOBAL METHODS ###
+naval_attack_table = pandas.read_csv(
+        # "../tables/navalAttackTablePivoted.csv")
+        "models/tables/navalAttackTablePivoted.csv")
+
+
+############################## GLOBAL METHODS ##################################
 
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-### SHIP SIZE CLASSES ###
-class HeavyShip:
+############################## SHIP SIZE CLASSES ###############################
+class HeavyShip(object):
     """
 
     docstring for HeavyShip
@@ -41,7 +46,7 @@ class HeavyShip:
         pass
 
 
-class LightShip:
+class LightShip(object):
     """
 
     docstring for LightShip
@@ -56,8 +61,8 @@ class LightShip:
         pass
 
 
-### NAVAL CHIT CLASSES ###
-class NavalChit:
+############################## NAVAL CHIT CLASSES ##############################
+class NavalChit(object):
 
     """
 
@@ -100,7 +105,7 @@ class NavalChit:
         return self.nationality + " " + self.number_of_factors + " factor " + SHIP_CLASS
 
 
-### STRATEGIC WARFARE CLASSES ###
+########################## STRATEGIC WARFARE CLASSES ###########################
 class StrategicWarfareShip(NavalChit):
     """
 
@@ -140,7 +145,7 @@ class Submarine(StrategicWarfareShip):
         pass
 
 
-### CARRIER AIR CLASSES ###
+############################# CARRIER AIR CLASSES ##############################
 class FastCarrier(HeavyShip, NavalChit):
 
     """
@@ -211,7 +216,7 @@ class EscortCarrier(LightShip, StrategicWarfareShip):
         pass
 
 
-### FLEET FACTOR CLASSES ###
+############################# FLEET FACTOR CLASSES #############################
 class FleetFactor(NavalChit):
 
     """
@@ -354,7 +359,7 @@ class BattleCruiser(CapitalShip):
         return BattleCruiser.SHIP_CLASS_SHORT + str(self.number_of_factors)
 
 
-### SHIP RENDER CLASSES ###
+############################# SHIP RENDER CLASSES ##############################
 class ShipInitializer(object):
 
     """handles initialization and instantation calls for different ship classes"""
@@ -424,14 +429,9 @@ def shipComposition(ship, number_of_ship):
 
             return placeholder_ship
 
-
-### ENGAGEMENT AND FORMATION CLASSES ###
+####################### ENGAGEMENT AND FORMATION CLASSES #######################
 class FleetCombat(object):
     """object to handle for FleetCombat"""
-
-    naval_attack_table = pandas.read_csv(
-        # "../tables/navalAttackTablePivoted.csv")
-        "models/tables/navalAttackTablePivoted.csv")
 
     def resolve_naval_attack(self, attacker_naval_drm=0, defender_naval_drm=0, attacker_special_activity=0, defender_special_activity=0):
 
@@ -544,12 +544,33 @@ class FleetCombat(object):
         pass
 
 
+class Combatant(object):
+    """object to handle combatant details"""
+    def __init__(self, short_designation):
+        self.short_designation = short_designation
+        self.nationality = None
+        self.national_adjective = None
+        self.fleet_composition = []
+        self.current_round_search_rolls = []
+        self.current_round_search_results = 0
+
+
 class NavalCombatRound(object):
     """docstring for NavalCombatRound"""
 
     def __init__(self, combatants_dict, combat_round_number):
         self.combatants_dict = combatants_dict
         self.combat_round_number = combat_round_number
+
+    def begin_naval_combat_round(self):
+        """handles any pre-segment work for naval combat round"""
+        clear_screen()
+
+        # print("Combatant fleets determined...")
+
+        print("\nBeginning fleet engagement...")
+
+        input("\npress the ENTER key to continue...\n\n")
 
     def form_combat_groups(self):
         """
@@ -558,7 +579,7 @@ class NavalCombatRound(object):
         clear_screen()
 
         for combatant_int in self.combatants_dict:
-            for taskforce_int in range(0, len(self.combatants_dict[combatant_int]["fleet_composition"])):
+            for taskforce_int in range(0, len(self.combatants_dict[combatant_int].fleet_composition)):
 
                 loop_is_done = False
                 while loop_is_done == False:
@@ -567,32 +588,29 @@ class NavalCombatRound(object):
                         clear_screen()
 
                         print("\nCombatant {} ({}):\n".format(
-                            self.combatants_dict[combatant_int]["NATIONALITY"],
-                            self.combatants_dict[combatant_int]["short_designation"]))
+                            self.combatants_dict[combatant_int].nationality,
+                            self.combatants_dict[combatant_int].short_designation))
 
                         print("\nFor TF {}, please assign to a combat group (between 1 and 6)\n".format(
-                            self.combatants_dict[combatant_int]["fleet_composition"][taskforce_int].number))
+                            self.combatants_dict[combatant_int].fleet_composition[taskforce_int].number))
 
                         temp_combat_group = int(input())
 
                         if temp_combat_group > 0 and temp_combat_group < 7:
 
                             # set TF combat group value
-                            self.combatants_dict[combatant_int]["fleet_composition"][taskforce_int].combat_group = temp_combat_group
+                            self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group = temp_combat_group
 
                             # update TF's 'combat group' status, ie whether it's an Active, Distant, or Pending CG
                             # reserved for TFs which have not yet joined combat
-                            if self.combatants_dict[combatant_int]["fleet_composition"][taskforce_int].combat_group == 0:
-                                self.combatants_dict[combatant_int]["fleet_composition"][
-                                    taskforce_int].combat_group_combat_status = "PENDING"
+                            if self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group == 0:
+                                self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group_combat_status = "PENDING"
 
-                            elif self.combatants_dict[combatant_int]["fleet_composition"][taskforce_int].combat_group <= self.combat_round_number:
-                                self.combatants_dict[combatant_int]["fleet_composition"][
-                                    taskforce_int].combat_group_combat_status = "ACTIVE"
+                            elif self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group <= self.combat_round_number:
+                                self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group_combat_status = "ACTIVE"
 
-                            elif self.combatants_dict[combatant_int]["fleet_composition"][taskforce_int].combat_group > self.combat_round_number:
-                                self.combatants_dict[combatant_int]["fleet_composition"][
-                                    taskforce_int].combat_group_combat_status = "DISTANT"
+                            elif self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group > self.combat_round_number:
+                                self.combatants_dict[combatant_int].fleet_composition[taskforce_int].combat_group_combat_status = "DISTANT"
 
                         else:
                             raise ValueError
@@ -639,6 +657,11 @@ class NavalCombatRound(object):
         Each player rolls dice to determine his success 
         in searching for his opponent's combat groups.
         """
+
+        clear_screen()
+        print("Combat groups assigned...\n")
+        print("\nInitializing search rolls...")
+
         # player input number of search die
         if method == "simple":
             # for each combatant, request player inputted number of search die
@@ -651,10 +674,8 @@ class NavalCombatRound(object):
                         clear_screen()
 
                         print("For {} ({})...\n".format(
-                            self.combatants_dict[combatant_int]["NATIONALITY"],
-                            self.combatants_dict[combatant_int]["short_designation"]
-                        )
-                        )
+                            self.combatants_dict[combatant_int].nationality,
+                            self.combatants_dict[combatant_int].short_designation))
 
                         print("How many search die does your side receive?\n\n")
                         number_of_die = int(input())
@@ -666,10 +687,9 @@ class NavalCombatRound(object):
 
                         input("\npress the ENTER key to continue...\n")
 
-                self.combatants_dict[combatant_int]["search_rolls_list"] = []
+                self.combatants_dict[combatant_int].search_rolls_list = []
                 for i in range(0, number_of_die):
-                    self.combatants_dict[combatant_int]["search_rolls_list"].append(
-                        randint(1, 6))
+                    self.combatants_dict[combatant_int].search_rolls_list.append(randint(1, 6))
 
         # use Rules as Written to determine number of search die
         elif method == "RAW":
@@ -697,9 +717,10 @@ class NavalCombatRound(object):
             search_results = 0
 
             # compare search die against combat group identifier
-            for search_roll in self.combatants_dict[combatant_int]["search_rolls_list"]:
+            for search_roll in self.combatants_dict[combatant_int].search_rolls_list:
 
-                for enemy_combat_group in self.combatants_dict[opponent_int]["fleet_composition"]:
+                # note 'combat group' is actually a Taskforce object
+                for enemy_combat_group in self.combatants_dict[opponent_int].fleet_composition:
 
                     # if search roll matches combat group, set CG as FOUND
                     if search_roll == enemy_combat_group.combat_group:
@@ -713,11 +734,11 @@ class NavalCombatRound(object):
 
             # tally combatant's distinct found enemy CGs
             distinct_found_enemy_cgs = 0
-            for enemy_combat_group in self.combatants_dict[opponent_int]["fleet_composition"]:
+            for enemy_combat_group in self.combatants_dict[opponent_int].fleet_composition:
                 if enemy_combat_group.combat_group_search_status == "FOUND":
                     distinct_found_enemy_cgs = distinct_found_enemy_cgs + 1
 
-            self.combatants_dict[combatant_int]["current_round_search_results"] = search_results
+            self.combatants_dict[combatant_int].current_round_search_results = search_results
 
     def reveal_combat_groups(self):
         """reveal combat groups, and number of search results per side"""
@@ -742,25 +763,25 @@ class NavalCombatRound(object):
             clear_screen()
 
             print("For {} ({})...\n\n".format(
-                self.combatants_dict[combatant_int]["NATIONALITY"],
-                self.combatants_dict[combatant_int]["short_designation"]))
+                self.combatants_dict[combatant_int].nationality,
+                self.combatants_dict[combatant_int].short_designation))
 
             print("Search die rolls are as follow...\n\n")
-            for die_roll in self.combatants_dict[combatant_int]["search_rolls_list"]:
+            for die_roll in self.combatants_dict[combatant_int].search_rolls_list:
                 print("{}...\n\n".format(die_roll))
 
             print("{} total search result(s) achieved...\n".format(
-                self.combatants_dict[combatant_int]["current_round_search_results"]))
+                self.combatants_dict[combatant_int].current_round_search_results))
 
             # if any enemy combat groups found...(list found enemy CGs)
-            if self.combatants_dict[combatant_int]["current_round_search_results"] >= 1:
+            if self.combatants_dict[combatant_int].current_round_search_results >= 1:
 
                 print("\nFOUND enemy Combat Groups:")
 
                 # for each enemy combat group...
-                for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int]["fleet_composition"])):
+                for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int].fleet_composition)):
 
-                    current_enemy_combat_group = self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int]
+                    current_enemy_combat_group = self.combatants_dict[opponent_int].fleet_composition[enemy_combat_group_int]
 
                     # if enemy combat group search status == FOUND
                     if current_enemy_combat_group.combat_group_search_status == "FOUND":
@@ -786,7 +807,7 @@ class NavalCombatRound(object):
                             combat_group_carrying_cargo_status = "Cargo not present"
 
                         print("\n - {} Combat Group {} ({} search result(s) against)".format(
-                            self.combatants_dict[opponent_int]["NATIONAL_ADJECTIVE"], current_enemy_combat_group.combat_group, current_enemy_combat_group.current_naval_round_number_of_search_results_against))
+                            self.combatants_dict[opponent_int].national_adjective, current_enemy_combat_group.combat_group, current_enemy_combat_group.current_naval_round_number_of_search_results_against))
                         # whether CG consists of less than ten naval factors
                         print("    * {}".format(cg_ten_factor_status))
                         # print(number of fast carriers in enemy combat group)
@@ -799,15 +820,15 @@ class NavalCombatRound(object):
 
             print("\n\nHIDDEN enemy combat groups:\n")
             number_of_hidden_enemy_combat_groups = 0
-            for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int]["fleet_composition"])):
+            for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int].fleet_composition)):
 
-                if self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int].combat_group_search_status == "HIDDEN":
+                if self.combatants_dict[opponent_int].fleet_composition[enemy_combat_group_int].combat_group_search_status == "HIDDEN":
 
                     number_of_hidden_enemy_combat_groups = number_of_hidden_enemy_combat_groups + 1
 
                     print("* {} Combat Group {}\n\n".format(
-                        self.combatants_dict[opponent_int]["NATIONAL_ADJECTIVE"],
-                        self.combatants_dict[opponent_int]["fleet_composition"][enemy_combat_group_int].combat_group))
+                        self.combatants_dict[opponent_int].national_adjective,
+                        self.combatants_dict[opponent_int].fleet_composition[enemy_combat_group_int].combat_group))
 
             if number_of_hidden_enemy_combat_groups == 0:
                 print("...there are currently no hidden enemy combat groups...\n\n")
@@ -815,6 +836,22 @@ class NavalCombatRound(object):
             print("Press enter to continue...\n\n")
             input()
 
+    def determine_combat_round_has_search_results(self):
+        """
+        sets current_round_has_search_results to False, 
+        then checks combatant_dict to see if current_round_has_search_results 
+        should be True
+        """
+        self.current_round_has_search_results = False
+
+        for combatant_int in self.combatants_dict:
+    
+            if self.combatants_dict[combatant_int].current_round_search_results > 0:
+                self.current_round_has_search_results = True
+
+    def determine_allocation_of_search_results(self):
+        pass
+    
     def air_strikes_and_attacks(self):
         """
 
@@ -830,24 +867,23 @@ class NavalCombatRound(object):
 
         for combatant_int in self.combatants_dict:
 
-            if self.combatants_dict[combatant_int]["current_round_search_results"] < 1:
+            if self.combatants_dict[combatant_int].current_round_search_results < 1:
                 pass
 
     def fleet_combat(self):
         """Fleet combat is resolved"""
 
-        # naval_combat_table =
-
         clear_screen()
         print("Search results achieved...Proceeding to fleet combat phase...\n\n")
-        print("Please press enter to continue...\n\n")
+        print("Press enter to continue...\n\n")
         input()
 
         # NOTE: 22.52 RULES OF ENGAGEMENT: Fleet combat must involve at least one active combat group, and may only be avoided if one side evades fleet combat (22.523).
 
         for combatant_int in self.combatants_dict:
 
-            if self.combatants_dict[combatant_int]["current_round_search_results"] < 1:
+            if self.combatants_dict[combatant_int].current_round_search_results < 1:
+                # for enemy_combat_group in list_of_enemy_combat_groups
                 pass
 
         #   Fleet combat
@@ -894,24 +930,17 @@ class NavalCombatRound(object):
         """
         pass
 
-    def determine_combat_round_has_search_results(self):
-        
-        self.current_round_has_search_results = False
-
-        for combatant_int in self.combatants_dict:
-        
-            if self.combatants_dict[combatant_int]["current_round_search_results"] > 0:
-                self.current_round_has_search_results = True
-
+    def no_search_results_present(self):
+        """handles interaction if neither side has achieved search results"""
+        clear_screen()
+            
+        print("\nNo search achieved by either side...\n")
+        print("\nPress enter to continue...")
+        input()
 
     def main(self):
-        clear_screen()
-
-        # print("Combatant fleets determined...")
-
-        print("\nBeginning fleet engagement...")
-
-        input("\npress the ENTER key to continue...\n\n")
+        
+        self.begin_naval_combat_round()
 
         self.form_combat_groups()
 
@@ -920,18 +949,19 @@ class NavalCombatRound(object):
             self.allocate_carrier_air_to_air_strikes()
             self.allocate_land_based_air_to_air_cover()
 
-        clear_screen()
-        print("Combat groups assigned...\n")
-        print("\nInitializing search rolls...")
-
         # call search function using 'simple' procedure
         self.search("simple")
 
         # 'Reveal' FOUND combat groups, list HIDDEN combat groups to user
         self.reveal_combat_groups()
 
+        # update self.current_round_has_search_results
         self.determine_combat_round_has_search_results()
 
+        # players allocate search results
+        self.determine_allocation_of_search_results()
+
+        # if search results present for either side...
         if self.current_round_has_search_results is True:
 
             if AIR_ALLOWED is True:
@@ -942,11 +972,7 @@ class NavalCombatRound(object):
             self.submarine_attacks()
         
         else:
-            clear_screen()
-            
-            print("\nNo search achieved by either side...\n")
-            print("\nPress enter to continue...")
-            input()
+            self.no_search_results_present()
 
         self.determine_combat_round_loser()
 
@@ -1085,8 +1111,8 @@ class TaskForce(object):
         player_ship_dict = {}
 
         print("For {} ({}) Taskforce {}...\n".format(
-            combatants_dict[current_sideInt]["NATIONAL_ADJECTIVE"],
-            combatants_dict[current_sideInt]["short_designation"],
+            combatants_dict[current_sideInt].national_adjective,
+            combatants_dict[current_sideInt].short_designation,
             self.number
         ))
 
@@ -1153,9 +1179,15 @@ class FleetEngagement(object):
     ]
 
     def __init__(self):
+
+        sideA = Combatant("sideA")
+        sideB = Combatant("sideB")
+
         self.combatants = {
-            0: {"short_designation": "sideA"},
-            1: {"short_designation": "sideB"}
+            # 0: {"short_designation": "sideA"},
+            # 1: {"short_designation": "sideB"}
+            0: sideA,
+            1: sideB
         }
 
     def determineNationalities(self, i):
@@ -1171,7 +1203,7 @@ class FleetEngagement(object):
             clear_screen()
 
             print("\nPlease choose a side for combatant {} from the following:\n"
-                  .format(self.combatants[i]["short_designation"]))
+                  .format(self.combatants[i].short_designation))
 
             # iterate through nations_list to list nation options to player
             for nation in FleetEngagement.nations_list:
@@ -1187,10 +1219,8 @@ class FleetEngagement(object):
 
                     # report player's nationality
                     print("\n\nYou have chosen " + player_nationality + "\n")
-
-                    return player_nationality
-
                     loop_is_done = True
+                    return player_nationality
 
             # only print if user choice is invalid, and loop to continue
             print(
@@ -1203,12 +1233,6 @@ class FleetEngagement(object):
         updates self.combatants[sideInt]
         """
 
-        # create list within combatants dict to hold each side's TFs
-        self.combatants[sideInt]["fleet_composition"] = []
-
-        # clear screen, set loop var
-        clear_screen()
-
         # loop to determine # of TFs
         loop_is_done = False
         while loop_is_done == False:
@@ -1217,8 +1241,8 @@ class FleetEngagement(object):
             clear_screen()
 
             print("\nFor {} ({}), how many task forces are involved?".format(
-                self.combatants[sideInt]["NATIONALITY"],
-                self.combatants[sideInt]["short_designation"]))
+                self.combatants[sideInt].nationality,
+                self.combatants[sideInt].short_designation))
 
             print("\n")
             number_of_taskforces = input("")
@@ -1236,8 +1260,7 @@ class FleetEngagement(object):
                 loop_is_done = True
 
             except ValueError:
-                print(
-                    "\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
+                print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
 
                 input("\npress the ENTER key to continue...\n")
 
@@ -1253,8 +1276,8 @@ class FleetEngagement(object):
                     clear_screen()
 
                     print("\nDetermining composition of {} ({}) taskforce ({})...\n".format(
-                        self.combatants[sideInt]["NATIONAL_ADJECTIVE"],
-                        self.combatants[sideInt]["short_designation"],
+                        self.combatants[sideInt].nationality,
+                        self.combatants[sideInt].short_designation,
                         current_tf+1))
 
                     print(
@@ -1278,8 +1301,8 @@ class FleetEngagement(object):
                     clear_screen()
 
                     print("\nDetermining composition of {} ({}) Taskforce {}...\n".format(
-                        self.combatants[sideInt]["NATIONAL_ADJECTIVE"],
-                        self.combatants[sideInt]["short_designation"],
+                        self.combatants[sideInt].national_adjective,
+                        self.combatants[sideInt].short_designation,
                         taskforce_number))
 
                     print("Set Naval DRM for taskforce:\n")
@@ -1293,7 +1316,7 @@ class FleetEngagement(object):
 
             # create TF obj
             taskforce = TaskForce(
-                self.combatants[sideInt]["NATIONALITY"],  # nationality
+                self.combatants[sideInt].nationality,  # nationality
                 0,  # total_number_of_naval_factors
                 "UNINVERTED",  # inversion status
                 "FAST",  # speed
@@ -1311,7 +1334,7 @@ class FleetEngagement(object):
             taskforce.total_naval_factors = taskforce.tf_total_factors()
 
             # append TF obj to a given side's "fleet_composition" list
-            self.combatants[sideInt]["fleet_composition"].append(taskforce)
+            self.combatants[sideInt].fleet_composition.append(taskforce)
 
     def begin_naval_combat(self):
 
@@ -1336,8 +1359,8 @@ class FleetEngagement(object):
         # determine combatant nationalities
         for i in self.combatants.keys():
 
-            self.combatants[i]["NATIONALITY"] = self.determineNationalities(i)
-            self.combatants[i]["NATIONAL_ADJECTIVE"] = FleetEngagement.nations_adjective_dict[self.combatants[i]["NATIONALITY"]]
+            self.combatants[i].nationality = self.determineNationalities(i)
+            self.combatants[i].national_adjective = FleetEngagement.nations_adjective_dict[self.combatants[i].nationality]
 
             input("\npress the ENTER key to continue...\n")
 
@@ -1357,58 +1380,3 @@ if __name__ == "__main__":
     logging.info("FleetEngagement.py excuted as __main__")
     test_battle = FleetEngagement()
     test_battle.main()
-
-
-# determine forces
-
-# START OF NAVAL COMBAT ROUND
-#   form combat groups
-# carrier-based counterair attacks on enemy air bases
-# allocate unused carrier-based air units between Air Strikes and CAP
-# allocate land-based air units as Air Cover (convert AAF to AAS as necessary)
-#   Search for enemy combat groups
-#   Reveal found combat groups
-# Carrier-based air strikes against naval units at sea
-# surprise level
-# air combat with air cover
-# air combat with CAP
-# air defense of naval units
-# air strikes versus naval units
-# Land-based air attacks against naval units at sea
-# (convert AAF to AAS as necessary)
-# surprise level (ALWAYS NONE)
-# air combat with air cover
-# air combat with CAP
-# air defense of naval units
-# air strikes versus naval units
-#   Fleet combat
-#       Determine which combat groups will engage in fleet combat
-#       Divide ships into heavy, light, and screened
-#       Defender ranks heavy ships from largest to smallest, then light ships, then screened ships.
-#       Heavy ship combat
-#           Attacker selects targets for his heavy ships.
-#           Defender selects targets for his heavy ships.
-#           Resolve all heavy ship fire versus light ships and apply damage.
-#       Light ship combat
-#           Select targets for light ships of both sides.
-#           Resolve all fire versus all heavy ships.
-#           Resolve all light ship fire versus light ships.
-#       Screened ship combat
-#           Resolve all fire versus screened ships if permitted.
-#   Combat groups which engaged in fleet combat may be recombined
-#   Ship withdrawal
-#   Submarine attacks
-
-
-# re: search die roll results
-# each die which matches the number of an enemy CG achieves a search result against that CG
-
-    # with multiple search results against a given CG
-    # CG may be attacked more than once equal to number of search results
-    # Air Strikes: For each search result against an active or distant enemy combat group, one air strike may be made against that combat group (23.72).
-    # Fleet Combat: For each search result against a distant enemy combat group, one active unpaired combat group may initiate fleet combat against that combat group (22.52). No search results are required for fleet combat between active combat groups and such fleet combat does not count against the limit on the number of air strikes.
-    # Effects Cumulative: The effects of search results are cumulative: two search results would allow any one of the following:
-    # Two air strikes against any combat group;
-    # Two fleet combats against a distant combat group; or
-    # One air strike and one fleet combat against a distant combat group.
-    # Submarine Attacks: Submarine attacks do not count against the limit on the number of times a found combat group may be attacked.
