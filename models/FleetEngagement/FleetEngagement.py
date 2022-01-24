@@ -22,6 +22,32 @@ AIR_ALLOWED = False
 NAVAL_ATTACK_TABLE = pandas.read_csv(
         "models/tables/navalAttackTablePivoted.csv")
 
+COMBAT_METHOD_CHOICES = [
+    'AIR',
+    'FLEET',
+    'NONE',
+]
+
+COMBAT_GROUP_COMBAT_STATUS_CHOICES = [
+    'ACTIVE',
+    'DISTANT',
+]
+
+COMBAT_GROUP_SEARCH_STATUS_CHOICES = [
+    'HIDDEN',
+    'FOUND',
+]
+
+COMBAT_GROUP_NUMBER_CHOICES = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+]
+
+
 
 ############################## GLOBAL METHODS ##################################
 
@@ -486,8 +512,19 @@ def shipComposition(ship, number_of_ship):
             return placeholder_ship
 
 ####################### ENGAGEMENT AND FORMATION CLASSES #######################
+class AirStrike(object):
+    """object to handle AirStrikes"""
+    
+    def __init__(self):
+        pass
+
+
 class FleetCombat(object):
     """object to handle for FleetCombat"""
+
+    def __init__(self, combatants_dict):
+            self.combatants_dict = combatants_dict
+            self.combat_group_pairings = {}
 
     def resolve_naval_attack(self, attacker_naval_drm=0, defender_naval_drm=0, attacker_special_activity=0, defender_special_activity=0):
 
@@ -504,10 +541,6 @@ class FleetCombat(object):
             two_d6_roll_after_mods = 2
 
         pass
-
-    def __init__(self, combatants_dict):
-        self.combatants_dict = combatants_dict
-        self.combat_group_pairings = {}
 
     def pair_off_combat_groups(self):
         pass
@@ -838,6 +871,7 @@ class NavalCombatRound(object):
 
             cg_combat_status = current_enemy_combat_group.combat_group_combat_status
 
+            print("FOUND enemy combat groups")
             # print cg, search results against cg, known cg data
             print("\n - {} Combat Group {} ({} search result(s) against)".format(
                 opp_national_adj, current_enemy_combat_group.combat_group, current_enemy_combat_group.current_naval_round_number_of_search_results_against))
@@ -875,8 +909,6 @@ class NavalCombatRound(object):
 
             # if any enemy combat groups found...(list found enemy CGs)
             if self.combatants_dict[combatant_int].combatant_round_search_results >= 1:
-
-                print("\nFOUND enemy Combat Groups:")
 
                 # for each enemy combat group in enemy combatant fleet composition dict...
                 for enemy_combat_group_int in range(0, len(self.combatants_dict[opponent_int].fleet_composition)):
@@ -938,61 +970,78 @@ class NavalCombatRound(object):
         """
         for combatant_int in self.combatants_dict:
 
-            # relabel for shorthand
-            combatant = self.combatants_dict[combatant_int]
-
             # set opponent_int, assumes fleet engagements are always 1v1
             if combatant_int == 0:
                 opponent_int = 1
             elif combatant_int == 1:
                 opponent_int = 0
+
+            # relabel for shorthand
+            combatant = self.combatants_dict[combatant_int]
+            opponent = self.combatants_dict[opponent_int]
             
             # if combatant has search results...
             if combatant.combatant_round_search_results > 0:
-
-                clear_screen()
-
-                print("Allocating search results for {} ({})...".format(combatant.nationality, combatant.short_designation))
                 
                 # loop through enemy combat groups...
-                for combat_group in self.combatants_dict[opponent_int].fleet_composition:
+                for enemy_combat_group in opponent.fleet_composition:
 
                     # list them if they're currently FOUND
-                    if combat_group.combat_group_search_status == "FOUND":
-
-                        national_adjective = self.combatants_dict[opponent_int].national_adjective
-                        self.print_found_cg_info(national_adjective, combat_group)
+                    if enemy_combat_group.combat_group_search_status == "FOUND":
                 
                         # for each search result that CG has against it...
-                        for result_int in range(0, combat_group.current_naval_round_number_of_search_results_against):
+                        for result_int in range(0, 
+                            enemy_combat_group.current_naval_round_number_of_search_results_against):
                     
                             loop_is_done = False
                             while loop_is_done is False:
-                            
+
                                 try:
 
-                                    print("\nFor search result {}...".format(result_int+1))
+                                    clear_screen()
+
+                                    print("Allocating {} ({}) search results...\n".format(
+                                        combatant.national_adjective, 
+                                        combatant.short_designation))
+
+                                    self.print_found_cg_info(
+                                        opponent.national_adjective, 
+                                        enemy_combat_group)
+
+                                    if enemy_combat_group.combat_group_combat_status == "ACTIVE":
+                                        method_str = "\nPlease choose AIR or NONE.\n"
+                                    elif enemy_combat_group.combat_group_combat_status == "DISTANT":
+                                        method_str = "\nPlease choose AIR, FLEET, or NONE.\n"
+
+                                    print("\n\nFor search result {}...".format(result_int+1))
 
                                     print("\nWhat method of attack do you wish to use for this search result?")
-                                    print("\nPlease choose air or fleet.\n")
-                                    print("\nNote:")
-                                    print("\n  Only DISTANT enemy combat groups may be chosen for FLEET combat.")
-                                    print("\n  ACTIVE enemy combat fleets may still be chosen for regular fleet combat later.\n")
-                                    print("\n  Active enemy combat groups may still be chosen for air strikes.")
-                                    
+                                    print(method_str)
+                                    # print("\nNote:")
+                                    # print("\n  Only DISTANT enemy combat groups may be chosen for FLEET combat.")
+                                    # print("\n  ACTIVE enemy combat fleets may still be chosen for regular fleet combat later.")
+                                    # print("\n  ACTIVE enemy combat groups may still be chosen for air strikes.\n")
+                                        
                                     # upper case user string input
                                     attack_method = input().upper()
 
                                     # confirm user input is proper value
                                     if (
                                         attack_method != "AIR" and 
-                                        attack_method != "FLEET"
+                                        attack_method != "FLEET" and
+                                        attack_method != "NONE"
                                     ) or (
                                         attack_method == "FLEET" and
-                                        combat_group.combat_group_combat_status == "ACTIVE"
+                                        enemy_combat_group.combat_group_combat_status == "ACTIVE"
                                     ):
                                         raise ValueError
 
+                                    # update combatant's allocated search results list
+                                    self.combatants_dict[combatant_int].allocated_search_results_list.append({
+                                        'target_cg':enemy_combat_group.number, 
+                                        'method': attack_method,
+                                    })
+                                    
                                     loop_is_done = True
 
                                 except ValueError:
@@ -1000,12 +1049,6 @@ class NavalCombatRound(object):
                                     print("\nPlayer choice is invalid.  Please confirm your choice is appropriate.")
                                     input("\npress the ENTER key to continue...\n")
 
-                            # update combatant's allocated search results list
-                            self.combatants_dict[combatant_int].allocated_search_results_list.append({
-                                'target_cg':combat_group.number, 
-                                'method': attack_method,
-                                })
-            
     def air_strikes_attacks(self):
         """
 
@@ -1060,6 +1103,91 @@ class NavalCombatRound(object):
     def submarine_attacks(self):
         """Submarine attacks are resolved"""
         pass
+
+    def display_queued_air_strikes(self):
+        """lists queued air strikes for player to carry out"""
+        
+        """
+        for each player, 
+            lists their available fleet combats (against distant CGs, via search results)
+            lists their available fleet combats (against active CGs)
+        """
+
+        for combatant_int in self.combatants_dict:
+
+            # set opponent int
+            if combatant_int == 0:
+                opponent_int = 1
+            elif combatant_int == 1:
+                opponent_int = 0
+            
+            number_of_air_strikes = 0 
+
+            clear_screen()
+
+            print("Displaying queued air strikes...\n")
+            # for queued search results:
+            for search_result_int in range(0, len(self.combatants_dict[combatant_int].allocated_search_results_list)):
+                
+                results_list = self.combatants_dict[combatant_int].allocated_search_results_list
+
+                # if they're marked as air strikes, list them
+                if results_list[search_result_int]["method"] == "AIR":
+                
+                    number_of_air_strikes = number_of_air_strikes + 1
+                    print("Air Strike #{}, target: Enemy Combat Group {}.\n".format(search_result_int+1, results_list[search_result_int]["target_cg"]))
+
+            # alert player if friendly air strikes allowed
+            if (
+                self.combatants_dict[opponent_int].combatant_round_search_results == 0 and
+                number_of_air_strikes > 0):
+                print("No friendly CGs found, surprise air strike allowed.")
+
+            if number_of_air_strikes < 1:
+                print("No friendly air strikes queued for launch...\n")
+
+            print("Press enter to continue...")
+            input()      
+
+    def display_queued_fleet_combats(self):
+        """lists queued fleet combats for player to carry out"""
+        
+        """
+        for each player, 
+            lists their available fleet combats (against distant CGs, via search results)
+            lists their available fleet combats (against active CGs)
+        """
+
+        for combatant_int in self.combatants_dict:
+
+            print("For {} ({})...\n".format(self.combatants_dict[combatant_int].nationality, self.combatants_dict[combatant_int].short_designation))
+
+            # set opponent int
+            if combatant_int == 0:
+                opponent_int = 1
+            elif combatant_int == 1:
+                opponent_int = 0
+            
+            number_of_fleet_combats = 0 
+
+            print("Listing Fleet Combats available by search result...\n")
+            
+            # for queued search results:
+            for search_result_int in range(0, len(self.combatants_dict[combatant_int].allocated_search_results_list)):
+                
+                results_list = self.combatants_dict[combatant_int].allocated_search_results_list
+
+                # if they're marked as Fleet Combat, list them
+                if results_list[search_result_int]["method"] == "FLEET":
+                
+                    number_of_distant_fleet_combats = number_of_distant_fleet_combats + 1
+                    print("Distant Fleet Combat #{}, target: Enemy Combat Group {}.\n".format(search_result_int+1, results_list[search_result_int]["target_cg"]))
+
+            if number_of_distant_fleet_combats < 1:
+                print("No distant fleet combats available...\n")
+
+            print("Press enter to continue...")
+            input()
 
     def determine_combat_round_loser(self):
         """determines 'loser' of combat based on lost naval factors (and hits for ties)"""
@@ -1117,9 +1245,9 @@ class NavalCombatRound(object):
                     self.combatants_dict[combatant_int].nationality,
                     self.combatants_dict[combatant_int].short_designation))
 
-                print("Press enter to continue...\n")
-                input()
-                quit()
+        print("Press enter to continue...\n")
+        input()
+        quit()
     
     def main(self):
         
@@ -1150,15 +1278,16 @@ class NavalCombatRound(object):
             # players allocate search results
             self.allocate_search_results()
 
-            if AIR_ALLOWED is True:
-                self.air_strikes_attacks()
-                
-            self.fleet_combat()
-
-            self.submarine_attacks()
-        
         else:
             self.no_search_results_present()
+
+        self.display_queued_air_strikes()
+            # if AIR_ALLOWED is True:
+            #     self.air_strikes_attacks()
+                
+            # self.fleet_combat()
+
+            # self.submarine_attacks()
 
         self.determine_combat_round_loser()
 
@@ -1452,15 +1581,17 @@ class FleetEngagement(object):
 
                 input("\npress the ENTER key to continue...\n")
 
-        # for each TF,
-        # determine composition of TF
-        # and append to TF obj to FleetEngagement.combatants dict
+        """
+        for each TF, determine composition of TF and append to TF obj to 
+        FleetEngagement.combatants dict
+        """
         for current_tf in range(0, number_of_taskforces):
 
             loop_is_done = False
             while loop_is_done == False:
 
-                try:
+                try: 
+                    # determine number identity of taskforce
                     clear_screen()
 
                     print("\nDetermining composition of {} ({}) taskforce ({})...\n".format(
@@ -1468,24 +1599,44 @@ class FleetEngagement(object):
                         self.combatants[sideInt].short_designation,
                         current_tf+1))
 
-                    print(
-                        "\nPlease designate a numbered identity for this task force...\n")
+                    print("\nPlease designate a numbered identity for this task force...\n")
                     print("(choose a number between 1 and 12)\n")
                     taskforce_number = int(input())
 
+                    # loop through TFs to confirm player chosen TF# isn't taken
+                    previously_taken_tf_int = False
+                    for taskforce in self.combatants[sideInt].fleet_composition:
+
+                        if taskforce_number == taskforce.number:
+                            previously_taken_tf_int = True
+                    
+                    # validate player chosen TF int is 'in range'
                     if taskforce_number < 1 or taskforce_number > 12:
+                        out_of_range_tf_int = True
+                    else:
+                        out_of_range_tf_int = False
+
+                    if (
+                        out_of_range_tf_int is True or
+                        previously_taken_tf_int is True
+                        ):
                         raise ValueError
                     else:
+                        # end TF # while loop
                         loop_is_done = True
 
                 except ValueError:
-                    print(
-                        "\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
-                    input("\npress the ENTER key to continue...\n")
+                    if out_of_range_tf_int is True:
+                        print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than one.")
+                    elif previously_taken_tf_int is True:
+                        print("\nA friendly taskforce with this number designation already exists.  Please choose another number.")
+
+                    print("\nPress the ENTER key to continue...\n")
+                    input("")
 
             loop_is_done = False
             while loop_is_done == False:
-                try:
+                try: # set naval DRM value for given taskforce
                     clear_screen()
 
                     print("\nDetermining composition of {} ({}) Taskforce {}...\n".format(
@@ -1498,13 +1649,13 @@ class FleetEngagement(object):
                     loop_is_done = True
 
                 except ValueError:
-                    print(
-                        "\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than zero.")
-                    input("\npress the ENTER key to continue...\n")
+                    print("\nPlayer choice is invalid.\n\nPlease confirm your input is an integer equal to or greater than zero.")
+                    print("\npress the ENTER key to continue...\n")
+                    input("")
 
             # create TF obj
             taskforce = TaskForce(
-                self.combatants[sideInt].nationality,  # nationality
+                self.combatants[sideInt].nationality,
                 0,  # total_number_of_naval_factors
                 "UNINVERTED",  # inversion status
                 "FAST",  # speed
